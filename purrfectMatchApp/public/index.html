@@ -17,21 +17,196 @@
     <button id="SouthernFinlandProvinceBtn" class="waves-effect waves-light btn" >Etelä-Suomen lääni</button>
     <button id="OuluProvinceBtn" class="waves-effect waves-light btn">Oulun lääni</button>
     <button id="EasternFinlandProvinceBtn" class="waves-effect waves-light btn"> Itä-Suomen lääni</button>
-
-    
   </div>
 
   <div id="admin-view" style="display: none">
     <p>Welcome admin!</p>
+    <div id="removeDataAdmin">
+      <h3>Show donation data</h3>
+      <div id="removableDatabase">
+        <button id="SFPDonations" class="waves-effect waves-light btn" >Etelä-Suomen lääni</button>
+        <button id="OPDonations" class="waves-effect waves-light btn" >Oulun lääni</button>
+        <button id="EFPDonations" class="waves-effect waves-light btn" > Itä-Suomen lääni</button>
 
+
+      </div>
+
+      <h4>Remove data from: </h4>
+      <button id="removeAnimal" class="waves-effect waves-light btn">Animal</button>
+      <button id="removeResCenter" class="waves-effect waves-light btn">Rescue center</button>
+      <button id="removeCustomer" class="waves-effect waves-light btn">Customer</button>
+      <button id="removeContact" class="waves-effect waves-light btn">Contact Person</button>
+
+      <p id="animalInfo" style="display: none">Give name of animal</p>
+      <p id="rescueInfo" style="display: none">Give name of rescue senter</p>
+      <p id="customerInfo"  style="display: none">Give name of customer</p>
+      <p id="personInfo" style="display: none">Give name of contact person</p>
+
+      <form id="removeItem" style="display: none">
+        <label for="itemName" style="color: black;">Insert name:</label><br>
+        <input type="text" id="itemName" name="itemName"><br>
+      </form>
+
+      <div id="removableDatabase" style="display: none" >
+        <button id="SFPRemoveBTN" class="waves-effect waves-light btn" >Etelä-Suomen lääni</button>
+        <button id="OPRemoveBTN" class="waves-effect waves-light btn" >Oulun lääni</button>
+        <button id="EFPRemoveBTN" class="waves-effect waves-light btn" > Itä-Suomen lääni</button>
+      </div>
+    </div>
+    <br>
+
+    <div> 
+      <h4>Modify Data</h4>
+      <p id="modifyInfo">What data you want to modify?</p>
+      <button id="modifyAnimal" class="waves-effect waves-light btn">Animal</button>
+      <button id="modifyResCenter" class="waves-effect waves-light btn">Rescue center</button>
+      <button id="modifyContact" class="waves-effect waves-light btn">Contact Person</button>
+
+      
+      <form id="modifyAnimalForm" style="display: none">
+        <p id="modifyInfoA">Which animal's data you want to modify?</p>
+        <label for="animalNameExist"style="color: black";>Name of animal:</label><br>
+        <input type="text" id="animalNameExist" name="animalNameExist"><br>
+        <p>Data you want to modify:</p>
+        <label for="newAnimalName" style="color: black;">New name of animal:</label><br>
+        <input type="text" id="animalName" name="animalName"><br>
+        <label for="newSpecies" style="color: black;">New species of animal:</label><br>
+        <input type="text" id="newSpecies" name="newSpecies"><br>
+        <label for="newDesc" style="color: black;">New description of animal:</label><br>
+        <input type="text" id="newDesc" name="newDesc"><br>
+        <label for="newAge" style="color: black;">New age of animal:</label><br>
+        <input type="number" id="newAge" name="newAge" min="0"><br>
+        <label for="newRescue" style="color: black;">New rescue senter name of animal:</label><br>
+        <input type="text" id="newRescue" name="newRescue"><br>
+      </form>
+
+      <form id="modifyRescueForm" style="display: none">
+        <p id="modifyInfoR">Which rescue center's data you want to modify?</p>
+        <label for="rescueNameExist" style="color: black;">Name of rescue center:</label><br>
+        <input type="text" id="rescueName" name="animalName"><br>
+        <p>Data you want to modify:</p>
+        <label for="newRescueName" style="color: black;">New name of rescue center:</label><br>
+        <input type="text" id="newRescueName" name="newRescueName"><br>
+        <label for="newAddressResc" style="color: black;">New address of rescue center:</label><br>
+        <input type="text" id="newAddressResc" name="newAddressResc"><br>
+      </form>
+
+      <form id="modifyPersonForm" style="display: none">
+        <label for="personNameExit" style="color: black;">Insert contact person name:</label><br>
+        <input type="text" id="personNameExit" name="personNameExit"><br>
+        <p>Data you want to modify:</p>
+        <label for="newPersonName" style="color: black;">New name of contact person:</label><br>
+        <input type="text" id="newPersonName" name="newPersonName"><br>
+        <label for="newPersonEmail" style="color: black;">New email of contact person:</label><br>
+        <input type="text" id="newPersonEmail" name="newPersonEmail"><br>
+        <label for="newPersonPhone" style="color: black;">New Phone number of contact person:</label><br>
+        <input type="text" id="newPersonPhone" name="newPersonPhone"><br>
+        <label for="ContactResc" style="color: black;">New name of rescue center:</label><br>
+        <input type="text" id="ContactResc" name="ContactResc"><br>
+      </form>
+
+      <div id="databaseRadio" style="display: none">
+        <form>
+          <p>Which database you want to modify</p>
+          <p>
+            <label>
+              <input class="with-gap" name="database" type="radio" value="EFP" />
+              <span style="color: black;">Etelä-Suomen lääni</span>
+            </label>
+          </p>
+          <p>
+            <label>
+              <input class="with-gap" name="database" type="radio" value="OP"  />
+              <span style="color: black;">Oulun lääni</span>
+            </label>
+          </p>
+          <p>
+            <label>
+              <input class="with-gap" name="database" type="radio" value="IFP" />
+              <span style="color: black;">Itä-Suomen lääni</span>
+            </label>
+          </p>
+        </form>
+      </div>
+
+      <button id="modifyBTN" style="display: none" class="waves-effect waves-light btn">Submit</button>
+
+    </div>
+
+    <div>
+      <h4>Insert Data</h4>
+      <p id="insertInfo">What data you want to insert?</p>
+      <button id="insertAnimal" class="waves-effect waves-light btn">Animal</button>
+      <button id="insertResCenter" class="waves-effect waves-light btn">Rescue center</button>
+    
+      <form id="insertAnimalForm" style="display: none">
+        <p>Fill all questions:</p>
+        <label for="insertAnimalName" style="color: black;">Name of animal:</label><br>
+        <input type="text" id="insertAnimalName" name="insertAnimalName"><br>
+        <label for="insertSpecies" style="color: black;">Species of animal:</label><br>
+        <input type="text" id="insertSpecies" name="insertSpecies"><br>
+        <label for="insertDesc" style="color: black;">Short description of animal:</label><br>
+        <input type="text" id="insertDesc" name="insertDesc"><br>
+        <label for="insertAge" style="color: black;">Age of animal:</label><br>
+        <input type="number" id="insertAge" name="insertAge" min="0"><br>
+        <label for="insertRescue" style="color: black;">Rescue center:</label><br>
+        <input type="text" id="insertRescue" name="insertRescue"><br>
+      </form>
+
+      <form id="insertRescueForm" style="display: none">
+        <p>Rescue Center data:</p>
+        <label for="insertRescueName" style="color: black;">Name of rescue center:</label><br>
+        <input type="text" id="insertRescueName" name="insertRescueName"><br>
+        <label for="insertAddressResc" style="color: black;">Address of rescue center:</label><br>
+        <input type="text" id="insertAddressResc" name="insertAddressResc"><br><br>
+
+        <p>Contact person data:</p>
+        <label for="insertPersonName" style="color: black;">Name of contact person:</label><br>
+        <input type="text" id="insertPersonName" name="insertPersonName"><br>
+        <label for="insertPersonEmail" style="color: black;">Eemail of contact person:</label><br>
+        <input type="text" id="insertPersonEmail" name="insertPersonEmail"><br>
+        <label for="insertPersonPhone" style="color: black;">Phone number of contact person:</label><br>
+        <input type="text" id="insertPersonPhone" name="insertPersonPhone"><br>
+      </form>
+
+
+
+      <div id="databaseRadioInsert" style="display: none">
+        <form>
+          <p>Which database you want to modify</p>
+          <p>
+            <label>
+              <input class="with-gap" name="database" type="radio" value="EFP" />
+              <span style="color: black;">Etelä-Suomen lääni</span>
+            </label>
+          </p>
+          <p>
+            <label>
+              <input class="with-gap" name="database" type="radio" value="OP"  />
+              <span style="color: black;">Oulun lääni</span>
+            </label>
+          </p>
+          <p>
+            <label>
+              <input class="with-gap" name="database" type="radio" value="IFP" />
+              <span style="color: black;">Itä-Suomen lääni</span>
+            </label>
+          </p>
+        </form>
+      </div>
+
+      <button id="insertBTN" style="display: none" class="waves-effect waves-light btn">Submit</button>
+      
+    </div>
+    <br>
     <button id="openUser" class="waves-effect waves-light btn">Back to user</button>
   </div>
 
   <div id="user-view">
     <p>Welcome User!</p>
-    <button id="openAdmin">Admin view</button>
+    <button id="openAdmin" class="waves-effect waves-light btn">Admin view</button>
   </div>
-  
+
 </body>
 
 </html>
