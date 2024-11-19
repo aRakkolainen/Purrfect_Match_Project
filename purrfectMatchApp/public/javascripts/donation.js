@@ -1,5 +1,6 @@
 document.getElementById("rescueInfo").style.display = "none";
 document.getElementById("donation").style.display = "none";
+document.getElementById("donationsInfo").style.display = "none";
 
 let selectedArea = "";
 
@@ -17,6 +18,46 @@ document.getElementById("ita-btn").addEventListener("click", () => {
   selectedArea = "Itasuomen laani";
   checkAccount();
 });
+
+document.getElementById("don-btn").addEventListener("click", () => {
+  cusDonations();
+});
+
+//View user's donations
+async function cusDonations() {
+  const name = document.getElementById("cutomer_name").value;
+  const email = document.getElementById("customer_email").value;
+
+  try {
+    const response = await fetch("http://localhost:5000/usersDonation", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name, email, selectedArea }),
+    });
+    const donations = await response.json();
+    document.getElementById("donationsInfo").style.display = "";
+
+    const tbody = document
+      .getElementById("donationsData")
+      .querySelector("tbody");
+    tbody.innerHTML = "";
+
+    donations.forEach((donation) => {
+      const row = document.createElement("tr");
+      const centerCell = document.createElement("td");
+      centerCell.textContent = donation.rescue_center_name;
+      const amountCell = document.createElement("td");
+      amountCell.textContent = donation.amount;
+      row.appendChild(centerCell);
+      row.appendChild(amountCell);
+      tbody.appendChild(row);
+    });
+  } catch (err) {
+    console.log(err);
+  }
+}
 
 //Check if there is an account
 async function checkAccount() {

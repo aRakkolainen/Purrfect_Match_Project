@@ -16,19 +16,6 @@ router.get("/data", (req, res) => {
   }
 });
 
-const client = new Client({
-  user: "postgres",
-  host: "localhost",
-  database: "Etelasuomen laani",
-  password: "1234",
-  port: "5432",
-});
-
-client
-  .connect()
-  .then(() => console.log("connected"))
-  .catch((err) => console.log(err.message));
-
 //New user creates an account
 router.post("/register", async (req, res) => {
   const { name, email, phone, selectedArea } = req.body;
@@ -63,12 +50,27 @@ router.post("/register", async (req, res) => {
 });
 
 //Customer update their information
-router.put("/update/customer", async (req, res) => {
-  const { name, email, newName, newEmail, newPhone } = req.body;
+router.put("/update", async (req, res) => {
+  const { name, email, phone, selectedArea, newName, newEmail, newPhone } =
+    req.body;
+
+  const client = new Client({
+    user: "postgres",
+    host: "localhost",
+    database: selectedArea,
+    password: "1234",
+    port: "5432",
+  });
+
+  client
+    .connect()
+    .then(() => console.log("connected"))
+    .catch((err) => console.log(err.message));
+
   try {
     const query =
-      "UPDATE customer SET customer_name = $1, email=$2, phone=$3 WHERE customer_name = $4 and email = $5";
-    const values = [newName, newEmail, newPhone, name, email];
+      "UPDATE customers SET customer_name = $1, email=$2, phone=$3 WHERE customer_name = $4 and email = $5 and phone =$6 ";
+    const values = [newName, newEmail, newPhone, name, email, phone];
     const result = await client.query(query, values);
     if (result.rowCount > 0) {
       res.status(200).json({ success: true, message: "Account updated" });
@@ -76,6 +78,49 @@ router.put("/update/customer", async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: "Failed to update account information" });
   }
+  client.end();
+});
+
+//Customer's donations
+router.post("/usersDonation", async (req, res) => {
+  const { name, email, selectedArea } = req.body;
+  const client = new Client({
+    user: "postgres",
+    host: "localhost",
+    database: selectedArea,
+    password: "1234",
+    port: "5432",
+  });
+
+  client
+    .connect()
+    .then(() => console.log("connected"))
+    .catch((err) => console.log(err.message));
+
+  try {
+    const customerQuery =
+      "SELECT customer_ID FROM customers WHERE customer_name = $1 and email = $2";
+    const customerResult = await client.query(customerQuery, [name, email]);
+
+    if (customerResult.rowCount === 0) {
+      res.status(404).json({ error: "Customer not found." });
+    }
+    const customerID = customerResult.rows[0].customer_id;
+
+    try {
+      const donationQuery =
+        "SELECT rescue_centers.rescue_center_name, donations.amount FROM donations JOIN rescue_centers ON donations.rescue_center_ID = rescue_centers.rescue_center_ID WHERE donations.customer_ID = $1";
+      const donationResults = await client.query(donationQuery, [customerID]);
+
+      res.json(donationResults.rows);
+    } catch (err) {
+      res.status(500).json({ error: "Failed to find donations" });
+    }
+  } catch (err) {
+    res.status(500).json({ error: "Failed to find donations" });
+  }
+
+  client.end();
 });
 
 //Account check and connect right database

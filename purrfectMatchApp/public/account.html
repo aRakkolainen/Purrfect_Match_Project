@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Resgistration</title>
+    <title>Purrfect Match</title>
     <link rel="stylesheet" href="/stylesheets/style.css" />
-    <script type="module" src="./javascripts/registration.js" defer></script>
+    <script type="module" src="./javascripts/account.js" defer></script>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
     />
     <link rel="stylesheet" href="./stylesheets/style.css" />
   </head>
+
   <body>
     <nav>
       <div class="nav-wrapper teal">
@@ -40,9 +41,10 @@
         </ul>
       </div>
     </nav>
-    <h2>Registration</h2>
 
-    <form id="registerForm">
+    <h2>Update account information</h2>
+    <h5>Provide old information first</h5>
+    <form id="accountForm">
       <label for="customer_name">Full name (fisrt and last name):</label>
       <input type="text" id="customer_name" name="name" required /><br />
       <label for="customer_email">Email:</label>
@@ -60,9 +62,18 @@
         Itäsuomen lääni</button
       ><br />
       <br />
-      <p>Almost there</p>
-      <button type="button" id="registration-btn" class="waves-light btn">
-        Register
+
+      <h5>Provide new information</h5>
+      <label for="new_customer_name">Full name (fisrt and last name):</label>
+      <input type="text" id="new_customer_name" name="name" required /><br />
+      <label for="new_customer_email">Email:</label>
+      <input type="text" id="new_customer_email" name="email" required /><br />
+      <label for="new_customer_phone">Phone:</label>
+      <input type="text" id="new_customer_phone" name="phone" required /><br />
+      <br />
+      <br />
+      <button type="button" id="update-btn" class="waves-light btn">
+        Update
       </button>
       <br />
     </form>
