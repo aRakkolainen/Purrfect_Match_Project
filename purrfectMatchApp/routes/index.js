@@ -30,22 +30,36 @@ client
   .catch((err) => console.log(err.message));
 
 //New user creates an account
-router.post("/registration", async (req, res) => {
-  const { name, email, phone } = req.body;
+router.post("/register", async (req, res) => {
+  const { name, email, phone, selectedArea } = req.body;
+
+  const client = new Client({
+    user: "postgres",
+    host: "localhost",
+    database: selectedArea,
+    password: "1234",
+    port: "5432",
+  });
+
+  client
+    .connect()
+    .then(() => console.log("connected"))
+    .catch((err) => console.log(err.message));
+
   try {
-    const maxID = await client.query(
-      "SELECT MAX(customer_ID) as max_id FROM customer"
+    const maxIDQuery = await client.query(
+      "SELECT MAX(CAST(SUBSTRING(customer_ID, 7) AS INTEGER)) as max_id FROM customers"
     );
-    const newID = maxID.rows[0].max_id || 0;
-    newID = "E_CUS_" + (newID + 1);
-    //Tarkista että toimii
-    console.log(newID);
+    const lastID = maxIDQuery.rows[0].max_id || 0;
+    const newId = selectedArea.charAt(0) + "_CUS_" + (parseInt(lastID) + 1);
+
     const query =
-      "INSERT INTO customer (customer_id, customer_name, email, phone) VALUES ($1, $2, $3, $4)";
-    const values = [newID, name, email, phone];
+      "INSERT INTO customers (customer_id, customer_name, email, phone) VALUES ($1, $2, $3, $4)";
+    const values = [newId, name, email, phone];
     await client.query(query, values);
     res.status(200).json({ success: true, message: "Account created" });
   } catch {}
+  client.end();
 });
 
 //Customer update their information

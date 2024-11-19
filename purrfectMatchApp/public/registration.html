@@ -36,5 +36,30 @@
       </div>
     </nav>
     <h2>Registration</h2>
+
+    <form id="registerForm">
+      <label for="customer_name">Full name (fisrt and last name):</label>
+      <input type="text" id="customer_name" name="name" required /><br />
+      <label for="customer_email">Email:</label>
+      <input type="text" id="customer_email" name="email" required /><br />
+      <label for="customer_phone">Phone:</label>
+      <input type="text" id="customer_phone" name="phone" required /><br />
+      <p>Select your own area</p>
+      <button type="button" id="etela-btn" class="waves-light btn">
+        Eteläsuomen lääni
+      </button>
+      <button type="button" id="oulu-btn" class="waves-light btn">
+        Oulun lääni
+      </button>
+      <button type="button" id="ita-btn" class="waves-light btn">
+        Itäsuomen lääni</button
+      ><br />
+      <br />
+      <p>Almost there</p>
+      <button type="button" id="registration-btn" class="waves-light btn">
+        Register
+      </button>
+      <br />
+    </form>
   </body>
 </html>
