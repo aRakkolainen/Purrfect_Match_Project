@@ -1,20 +1,75 @@
 <html>
+  <head>
+    <title>Purrfect Match</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <script type="module" src="./javascripts/index.js" defer></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+    />
+    <link rel="stylesheet" href="./stylesheets/style.css" />
+  </head>
 
-<head>
-  <title>Purrfect Match</title>
-  <link rel="stylesheet" href="/stylesheets/style.css">
-  <script type="module" src="./javascripts/index.js" defer></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-  <link rel="stylesheet" href="./stylesheets/style.css">
-</head>
+  <body>
+    <nav>
+      <div class="nav-wrapper teal">
+        <ul>
+          <li>
+            <a href="/" id="home-btn" class="waves-light btn">Purrfect Match</a>
+          </li>
+        </ul>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+          <li>
+            <a
+              href="/registration.html"
+              id="register-btn"
+              class="waves-light btn"
+              >Registration</a
+            >
+          </li>
+          <li>
+            <a href="/donation.html" id="donation-btn" class="waves-light btn"
+              >Make a Donation</a
+            >
+          </li>
+        </ul>
+      </div>
+    </nav>
 
-<body>
-  <h2>Purrfect Match</h2>
-  <p>Welcome to Purrfect Match</p>
-  <h4>Select your location</h4>
-  <button id="SouthernFinlandProvinceBtn" class="waves-effect waves-light btn" >Etelä-Suomen lääni</button>
-  <button id="OuluProvinceBtn" class="waves-effect waves-light btn">Oulun lääni</button>
-  <button id="EasternFinlandProvinceBtn" class="waves-effect waves-light btn"> Itä-Suomen lääni</button>
-</body>
+    <h2>Purrfect Match</h2>
 
+    <div>
+      <p>Welcome to Purrfect Match</p>
+      <h4>Select your location</h4>
+      <button
+        id="SouthernFinlandProvinceBtn"
+        class="waves-effect waves-light btn"
+      >
+        Etelä-Suomen lääni
+      </button>
+      <button id="OuluProvinceBtn" class="waves-effect waves-light btn">
+        Oulun lääni
+      </button>
+      <button
+        id="EasternFinlandProvinceBtn"
+        class="waves-effect waves-light btn"
+      >
+        Itä-Suomen lääni
+      </button>
+    </div>
+
+    <div id="admin-view" style="display: none">
+      <p>Welcome admin!</p>
+      <button id="openUser" class="waves-effect waves-light btn">
+        Back to user
+      </button>
+    </div>
+
+    <div id="user-view">
+      <p>Welcome User!</p>
+      <button id="openAdmin" class="waves-effect waves-light btn">
+        Admin view
+      </button>
+    </div>
+  </body>
 </html>
