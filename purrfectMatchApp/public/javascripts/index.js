@@ -8,6 +8,11 @@ const easternFinlandProvinceBtn = document.getElementById("EasternFinlandProvinc
 
 
 
+const showAllRescueCentersBtn = document.getElementById("showAllRescueCenters");
+showAllRescueCentersBtn.addEventListener("click", () => {
+    window.location.href = "http://localhost:3000/allRescueCenters.html";
+})
+
 
 
 
