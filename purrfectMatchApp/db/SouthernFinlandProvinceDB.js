@@ -6,7 +6,7 @@ const pool = new Pool({
     password: 'x', 
     host: 'localhost', 
     port: 5433, 
-    database: 'ProvinceOfSouthFinlandDB'
+    database: 'Etelasuomen laani'
 });
 
 module.exports = {

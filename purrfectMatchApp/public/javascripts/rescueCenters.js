@@ -1,10 +1,26 @@
 let rescueCentersTableBody = document.getElementById("rescueCenters");
+const showAllRescueCenters = document.getElementById("allProvincesOption");
+const showOnlySouthernFinlandCenters = document.getElementById("southernFinlandProvinceOption");
+const showOnlyEasternFinlandCenters = document.getElementById("easternFinlandProvinceOption");
+const showOnlyProvinceOfOuluCenters = document.getElementById("provinceOfOuluOption");
 
 window.onload = async () => {
     let response = await fetchAllRescueCentersData();
     let rescueCentersList = response.rescueCenters;
     fillRescueCenterTable(rescueCentersList);
+    showAllRescueCenters.addEventListener("click", () => {
+        
+    })
+
+    if(showAllRescueCenters.checked) {
+        console.log("Showing all rescue centers..");
+    } else if(showOnlySouthernFinlandCenters.checked) {
+        console.log("Showing only rescue centers in Southern Finland Area");
+    }
 }
+
+
+
 
 async function fetchAllRescueCentersData() {
     let url = 'http://localhost:3000/list/rescueCenters';
@@ -16,10 +32,8 @@ async function fetchAllRescueCentersData() {
 
 function fillRescueCenterTable(rescueCentersList) {
     console.log("Filling the table..");
-    console.log(rescueCentersList);
     if(rescueCentersList && rescueCentersList.length > 0) {
         rescueCentersList.forEach(center => {
-            console.log(center);
             let row = createRescueCenterRow(center);
             rescueCentersTableBody.appendChild(row);
         });
