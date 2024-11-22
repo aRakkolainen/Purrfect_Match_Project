@@ -1,15 +1,7 @@
-//JS file for handling the front-end
-
-//Buttons for each province
-
-const southernFinlandProvinceBtn = document.getElementById("SouthernFinlandProvinceBtn");
-const provinceOfOuluBtn = document.getElementById("OuluProvinceBtn");
-const easternFinlandProvinceBtn = document.getElementById("EasternFinlandProvinceBtn");
-
 //Open admin view
-/*function toggleView(showAdmin) {
-    const userView = document.getElementById('user-view');
+function toggleView(loginAdmin) {
     const adminView = document.getElementById('admin-view');
+    const loginView = document.getElementById('loginAsAdmin');
 
     const animalInfo = document.getElementById('animalInfo');
     const rescueInfo = document.getElementById('rescueInfo');
@@ -19,12 +11,11 @@ const easternFinlandProvinceBtn = document.getElementById("EasternFinlandProvinc
     const removeItem = document.getElementById('removeItem');
     const database = document.getElementById('removableDatabase');
 
-    if (showAdmin) {
+    if (loginAdmin) {
         adminView.style.display = 'block';
-        userView.style.display = 'none';
+        loginView.style.display = 'none';
     } else {
         adminView.style.display = 'none';
-        userView.style.display = 'block';
         animalInfo.style.display = 'none';
         rescueInfo.style.display = 'none';
         customerInfo.style.display = 'none';
@@ -35,8 +26,8 @@ const easternFinlandProvinceBtn = document.getElementById("EasternFinlandProvinc
     }
 }
 
-document.getElementById('openAdmin').addEventListener('click', () => toggleView(true));
-//document.getElementById('openUser').addEventListener('click', () => toggleView(false));
+// Lisätään kuuntelijat
+document.getElementById('adminLoginBTN').addEventListener('click', () => toggleView(true));
 
 
 //Open deletion forms for different database tables
@@ -119,4 +110,4 @@ function toggleInsertView(showForm) {
 }
 document.getElementById('insertAnimal').addEventListener('click', () => toggleInsertView('animal'));
 document.getElementById('insertResCenter').addEventListener('click', () => toggleInsertView('rescue'));
-*/
+
