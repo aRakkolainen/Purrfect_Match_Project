@@ -2,6 +2,9 @@ var express = require("express");
 var router = express.Router();
 
 const { Client } = require("pg");
+let southernFinlandProvinceDB = require("../db/SouthernFinlandProvinceDB");
+let provinceOfOuluDB = require("../db/ProvinceOfOuluDB");
+let easternFinlandProvinceDB = require("../db/EasternFinlandProvinceDB");
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -19,34 +22,55 @@ router.get("/data", (req, res) => {
 //New user creates an account
 router.post("/register", async (req, res) => {
   const { name, email, phone, selectedArea } = req.body;
+  if (selectedArea === "Etelasuomen laani") {
+    try {
+      const maxIDQuery = await southernFinlandProvinceDB.query(
+        "SELECT MAX(CAST(SUBSTRING(customer_ID, 7) AS INTEGER)) as max_id FROM customers"
+      );
+      const lastID = maxIDQuery.rows[0].max_id || 0;
+      const newId = selectedArea.charAt(0) + "_CUS_" + (parseInt(lastID) + 1);
 
-  const client = new Client({
-    user: "postgres",
-    host: "localhost",
-    database: selectedArea,
-    password: "1234",
-    port: "5432",
-  });
+      const query =
+        "INSERT INTO customers (customer_id, customer_name, email, phone) VALUES ($1, $2, $3, $4)";
+      const values = [newId, name, email, phone];
+      await southernFinlandProvinceDB.query(query, values);
+      res.status(200).json({ success: true, message: "Account created" });
+    } catch (err) {
+      res.status(500).json({ error: "Failed to create an account" });
+    }
+  } else if (selectedArea === "Oulun laani") {
+    try {
+      const maxIDQuery = await provinceOfOuluDB.query(
+        "SELECT MAX(CAST(SUBSTRING(customer_ID, 7) AS INTEGER)) as max_id FROM customers"
+      );
+      const lastID = maxIDQuery.rows[0].max_id || 0;
+      const newId = selectedArea.charAt(0) + "_CUS_" + (parseInt(lastID) + 1);
 
-  client
-    .connect()
-    .then(() => console.log("connected"))
-    .catch((err) => console.log(err.message));
+      const query =
+        "INSERT INTO customers (customer_id, customer_name, email, phone) VALUES ($1, $2, $3, $4)";
+      const values = [newId, name, email, phone];
+      await provinceOfOuluDB.query(query, values);
+      res.status(200).json({ success: true, message: "Account created" });
+    } catch (err) {
+      res.status(500).json({ error: "Failed to create an account" });
+    }
+  } else {
+    try {
+      const maxIDQuery = await easternFinlandProvinceDB.query(
+        "SELECT MAX(CAST(SUBSTRING(customer_ID, 7) AS INTEGER)) as max_id FROM customers"
+      );
+      const lastID = maxIDQuery.rows[0].max_id || 0;
+      const newId = selectedArea.charAt(0) + "_CUS_" + (parseInt(lastID) + 1);
 
-  try {
-    const maxIDQuery = await client.query(
-      "SELECT MAX(CAST(SUBSTRING(customer_ID, 7) AS INTEGER)) as max_id FROM customers"
-    );
-    const lastID = maxIDQuery.rows[0].max_id || 0;
-    const newId = selectedArea.charAt(0) + "_CUS_" + (parseInt(lastID) + 1);
-
-    const query =
-      "INSERT INTO customers (customer_id, customer_name, email, phone) VALUES ($1, $2, $3, $4)";
-    const values = [newId, name, email, phone];
-    await client.query(query, values);
-    res.status(200).json({ success: true, message: "Account created" });
-  } catch {}
-  client.end();
+      const query =
+        "INSERT INTO customers (customer_id, customer_name, email, phone) VALUES ($1, $2, $3, $4)";
+      const values = [newId, name, email, phone];
+      await easternFinlandProvinceDB.query(query, values);
+      res.status(200).json({ success: true, message: "Account created" });
+    } catch (err) {
+      res.status(500).json({ error: "Failed to create an account" });
+    }
+  }
 });
 
 //Customer update their information
@@ -54,156 +78,294 @@ router.put("/update", async (req, res) => {
   const { name, email, phone, selectedArea, newName, newEmail, newPhone } =
     req.body;
 
-  const client = new Client({
-    user: "postgres",
-    host: "localhost",
-    database: selectedArea,
-    password: "1234",
-    port: "5432",
-  });
-
-  client
-    .connect()
-    .then(() => console.log("connected"))
-    .catch((err) => console.log(err.message));
-
-  try {
-    const query =
-      "UPDATE customers SET customer_name = $1, email=$2, phone=$3 WHERE customer_name = $4 and email = $5 and phone =$6 ";
-    const values = [newName, newEmail, newPhone, name, email, phone];
-    const result = await client.query(query, values);
-    if (result.rowCount > 0) {
-      res.status(200).json({ success: true, message: "Account updated" });
+  if (selectedArea === "Etelasuomen laani") {
+    try {
+      const query =
+        "UPDATE customers SET customer_name = $1, email=$2, phone=$3 WHERE customer_name = $4 and email = $5 and phone =$6 ";
+      const values = [newName, newEmail, newPhone, name, email, phone];
+      const result = await southernFinlandProvinceDB.query(query, values);
+      if (result.rowCount > 0) {
+        res.status(200).json({ success: true, message: "Account updated" });
+      }
+    } catch (err) {
+      res.status(500).json({ error: "Failed to update account information" });
     }
-  } catch (err) {
-    res.status(500).json({ error: "Failed to update account information" });
+  } else if (selectedArea === "Oulun laani") {
+    try {
+      const query =
+        "UPDATE customers SET customer_name = $1, email=$2, phone=$3 WHERE customer_name = $4 and email = $5 and phone =$6 ";
+      const values = [newName, newEmail, newPhone, name, email, phone];
+      const result = await provinceOfOuluDB.query(query, values);
+      if (result.rowCount > 0) {
+        res.status(200).json({ success: true, message: "Account updated" });
+      }
+    } catch (err) {
+      res.status(500).json({ error: "Failed to update account information" });
+    }
+  } else {
+    try {
+      const query =
+        "UPDATE customers SET customer_name = $1, email=$2, phone=$3 WHERE customer_name = $4 and email = $5 and phone =$6 ";
+      const values = [newName, newEmail, newPhone, name, email, phone];
+      const result = await easternFinlandProvinceDB.query(query, values);
+      if (result.rowCount > 0) {
+        res.status(200).json({ success: true, message: "Account updated" });
+      }
+    } catch (err) {
+      res.status(500).json({ error: "Failed to update account information" });
+    }
   }
-  client.end();
 });
 
 //Customer's donations
 router.post("/usersDonation", async (req, res) => {
   const { name, email, selectedArea } = req.body;
-  const client = new Client({
-    user: "postgres",
-    host: "localhost",
-    database: selectedArea,
-    password: "1234",
-    port: "5432",
-  });
 
-  client
-    .connect()
-    .then(() => console.log("connected"))
-    .catch((err) => console.log(err.message));
-
-  try {
-    const customerQuery =
-      "SELECT customer_ID FROM customers WHERE customer_name = $1 and email = $2";
-    const customerResult = await client.query(customerQuery, [name, email]);
-
-    if (customerResult.rowCount === 0) {
-      res.status(404).json({ error: "Customer not found." });
-    }
-    const customerID = customerResult.rows[0].customer_id;
-
+  if (selectedArea === "Etelasuomen laani") {
     try {
-      const donationQuery =
-        "SELECT rescue_centers.rescue_center_name, donations.amount FROM donations JOIN rescue_centers ON donations.rescue_center_ID = rescue_centers.rescue_center_ID WHERE donations.customer_ID = $1";
-      const donationResults = await client.query(donationQuery, [customerID]);
+      const customerQuery =
+        "SELECT customer_ID FROM customers WHERE customer_name = $1 and email = $2";
+      const customerResult = await southernFinlandProvinceDB.query(
+        customerQuery,
+        [name, email]
+      );
 
-      res.json(donationResults.rows);
+      if (customerResult.rowCount === 0) {
+        res.status(404).json({ error: "Customer not found." });
+      }
+      const customerID = customerResult.rows[0].customer_id;
+
+      try {
+        const donationQuery =
+          "SELECT rescue_centers.rescue_center_name, donations.amount FROM donations JOIN rescue_centers ON donations.rescue_center_ID = rescue_centers.rescue_center_ID WHERE donations.customer_ID = $1";
+        const donationResults = await southernFinlandProvinceDB.query(
+          donationQuery,
+          [customerID]
+        );
+
+        res.json(donationResults.rows);
+      } catch (err) {
+        res.status(500).json({ error: "Failed to find donations" });
+      }
     } catch (err) {
       res.status(500).json({ error: "Failed to find donations" });
     }
-  } catch (err) {
-    res.status(500).json({ error: "Failed to find donations" });
-  }
+  } else if (selectedArea === "Oulun laani") {
+    try {
+      const customerQuery =
+        "SELECT customer_ID FROM customers WHERE customer_name = $1 and email = $2";
+      const customerResult = await provinceOfOuluDB.query(customerQuery, [
+        name,
+        email,
+      ]);
 
-  client.end();
+      if (customerResult.rowCount === 0) {
+        res.status(404).json({ error: "Customer not found." });
+      }
+      const customerID = customerResult.rows[0].customer_id;
+
+      try {
+        const donationQuery =
+          "SELECT rescue_centers.rescue_center_name, donations.amount FROM donations JOIN rescue_centers ON donations.rescue_center_ID = rescue_centers.rescue_center_ID WHERE donations.customer_ID = $1";
+        const donationResults = await provinceOfOuluDB.query(donationQuery, [
+          customerID,
+        ]);
+
+        res.json(donationResults.rows);
+      } catch (err) {
+        res.status(500).json({ error: "Failed to find donations" });
+      }
+    } catch (err) {
+      res.status(500).json({ error: "Failed to find donations" });
+    }
+  } else {
+    try {
+      const customerQuery =
+        "SELECT customer_ID FROM customers WHERE customer_name = $1 and email = $2";
+      const customerResult = await easternFinlandProvinceDB.query(
+        customerQuery,
+        [name, email]
+      );
+
+      if (customerResult.rowCount === 0) {
+        res.status(404).json({ error: "Customer not found." });
+      }
+      const customerID = customerResult.rows[0].customer_id;
+
+      try {
+        const donationQuery =
+          "SELECT rescue_centers.rescue_center_name, donations.amount FROM donations JOIN rescue_centers ON donations.rescue_center_ID = rescue_centers.rescue_center_ID WHERE donations.customer_ID = $1";
+        const donationResults = await easternFinlandProvinceDB.query(
+          donationQuery,
+          [customerID]
+        );
+
+        res.json(donationResults.rows);
+      } catch (err) {
+        res.status(500).json({ error: "Failed to find donations" });
+      }
+    } catch (err) {
+      res.status(500).json({ error: "Failed to find donations" });
+    }
+  }
 });
 
 //Account check and connect right database
 router.post("/accountCheck", async (req, res) => {
   const { name, email, selectedArea } = req.body;
 
-  const client = new Client({
-    user: "postgres",
-    host: "localhost",
-    database: selectedArea,
-    password: "1234",
-    port: "5432",
-  });
-
-  client
-    .connect()
-    .then(() => console.log("connected"))
-    .catch((err) => console.log(err.message));
-
-  try {
-    const customerQuery =
-      "SELECT customer_ID FROM customers WHERE customer_name = $1 and email = $2";
-    const customerResult = await client.query(customerQuery, [name, email]);
-
-    if (customerResult.rowCount === 0) {
-      res.status(404).json({ error: "Customer not found. Register first." });
-    }
-    const customerID = customerResult.rows[0].customer_id;
-
+  if (selectedArea === "Etelasuomen laani") {
     try {
-      const rescueCenterList = client.query(
-        "SELECT rescue_center_ID, rescue_center_name FROM rescue_centers"
+      const customerQuery =
+        "SELECT customer_ID FROM customers WHERE customer_name = $1 and email = $2";
+      const customerResult = await southernFinlandProvinceDB.query(
+        customerQuery,
+        [name, email]
       );
-      const [listResult] = await Promise.all([rescueCenterList]);
-      res.json({ customerID, listResult: listResult.rows });
+
+      if (customerResult.rowCount === 0) {
+        res.status(404).json({ error: "Customer not found. Register first." });
+      }
+      const customerID = customerResult.rows[0].customer_id;
+
+      try {
+        const rescueCenterList = southernFinlandProvinceDB.query(
+          "SELECT rescue_center_ID, rescue_center_name FROM rescue_centers"
+        );
+        const [listResult] = await Promise.all([rescueCenterList]);
+        res.json({ customerID, listResult: listResult.rows });
+      } catch (err) {
+        res.status(500).json({ error: err.message });
+      }
     } catch (err) {
-      res.status(500).json({ error: err.message });
+      res.status(500).json({ error: "Failed to make donation" });
     }
-  } catch (err) {
-    res.status(500).json({ error: "Failed to make donation" });
+  } else if (selectedArea === "Oulun laani") {
+    try {
+      const customerQuery =
+        "SELECT customer_ID FROM customers WHERE customer_name = $1 and email = $2";
+      const customerResult = await provinceOfOuluDB.query(customerQuery, [
+        name,
+        email,
+      ]);
+
+      if (customerResult.rowCount === 0) {
+        res.status(404).json({ error: "Customer not found. Register first." });
+      }
+      const customerID = customerResult.rows[0].customer_id;
+
+      try {
+        const rescueCenterList = provinceOfOuluDB.query(
+          "SELECT rescue_center_ID, rescue_center_name FROM rescue_centers"
+        );
+        const [listResult] = await Promise.all([rescueCenterList]);
+        res.json({ customerID, listResult: listResult.rows });
+      } catch (err) {
+        res.status(500).json({ error: err.message });
+      }
+    } catch (err) {
+      res.status(500).json({ error: "Failed to make donation" });
+    }
+  } else {
+    try {
+      const customerQuery =
+        "SELECT customer_ID FROM customers WHERE customer_name = $1 and email = $2";
+      const customerResult = await easternFinlandProvinceDB.query(
+        customerQuery,
+        [name, email]
+      );
+
+      if (customerResult.rowCount === 0) {
+        res.status(404).json({ error: "Customer not found. Register first." });
+      }
+      const customerID = customerResult.rows[0].customer_id;
+
+      try {
+        const rescueCenterList = easternFinlandProvinceDB.query(
+          "SELECT rescue_center_ID, rescue_center_name FROM rescue_centers"
+        );
+        const [listResult] = await Promise.all([rescueCenterList]);
+        res.json({ customerID, listResult: listResult.rows });
+      } catch (err) {
+        res.status(500).json({ error: err.message });
+      }
+    } catch (err) {
+      res.status(500).json({ error: "Failed to make donation" });
+    }
   }
-  client.end();
 });
 
 //Making donation
 router.post("/donation", async (req, res) => {
   const { rescueCenterID, customerID, donAmount, selectedArea } = req.body;
-  console.log(selectedArea);
-  const client = new Client({
-    user: "postgres",
-    host: "localhost",
-    database: selectedArea,
-    password: "1234",
-    port: "5432",
-  });
 
-  client
-    .connect()
-    .then(() => console.log("connected"))
-    .catch((err) => console.log(err.message));
+  if (selectedArea === "Etelasuomen laani") {
+    try {
+      const maxIDQuery = await southernFinlandProvinceDB.query(
+        "SELECT MAX(CAST(SUBSTRING(donation_ID, 7) AS INTEGER)) as max_id FROM donations"
+      );
+      const lastID = maxIDQuery.rows[0].max_id || 0;
+      const newId = customerID.charAt(0) + "_DON_" + (parseInt(lastID) + 1);
 
-  try {
-    const maxIDQuery = await client.query(
-      "SELECT MAX(CAST(SUBSTRING(donation_ID, 7) AS INTEGER)) as max_id FROM donations"
-    );
-    const lastID = maxIDQuery.rows[0].max_id || 0;
-    const newId = customerID.charAt(0) + "_DON_" + (parseInt(lastID) + 1);
+      const donationQuery =
+        "INSERT INTO donations (donation_ID, customer_ID, rescue_center_ID, amount) VALUES ($1, $2, $3, $4)";
 
-    const donationQuery =
-      "INSERT INTO donations (donation_ID, customer_ID, rescue_center_ID, amount) VALUES ($1, $2, $3, $4)";
+      await southernFinlandProvinceDB.query(donationQuery, [
+        newId,
+        customerID,
+        rescueCenterID,
+        donAmount,
+      ]);
 
-    await client.query(donationQuery, [
-      newId,
-      customerID,
-      rescueCenterID,
-      donAmount,
-    ]);
+      res.status(200).json({ success: true, message: "Donation was success" });
+    } catch (err) {
+      res.status(500).json({ error: "Failed to make donation" });
+    }
+  } else if (selectedArea === "Oulun laani") {
+    try {
+      const maxIDQuery = await provinceOfOuluDB.query(
+        "SELECT MAX(CAST(SUBSTRING(donation_ID, 7) AS INTEGER)) as max_id FROM donations"
+      );
+      const lastID = maxIDQuery.rows[0].max_id || 0;
+      const newId = customerID.charAt(0) + "_DON_" + (parseInt(lastID) + 1);
 
-    res.status(200).json({ success: true, message: "Donation was success" });
-  } catch (err) {
-    res.status(500).json({ error: "Failed to make donation" });
+      const donationQuery =
+        "INSERT INTO donations (donation_ID, customer_ID, rescue_center_ID, amount) VALUES ($1, $2, $3, $4)";
+
+      await provinceOfOuluDB.query(donationQuery, [
+        newId,
+        customerID,
+        rescueCenterID,
+        donAmount,
+      ]);
+
+      res.status(200).json({ success: true, message: "Donation was success" });
+    } catch (err) {
+      res.status(500).json({ error: "Failed to make donation" });
+    }
+  } else {
+    try {
+      const maxIDQuery = await easternFinlandProvinceDB.query(
+        "SELECT MAX(CAST(SUBSTRING(donation_ID, 7) AS INTEGER)) as max_id FROM donations"
+      );
+      const lastID = maxIDQuery.rows[0].max_id || 0;
+      const newId = customerID.charAt(0) + "_DON_" + (parseInt(lastID) + 1);
+
+      const donationQuery =
+        "INSERT INTO donations (donation_ID, customer_ID, rescue_center_ID, amount) VALUES ($1, $2, $3, $4)";
+
+      await easternFinlandProvinceDB.query(donationQuery, [
+        newId,
+        customerID,
+        rescueCenterID,
+        donAmount,
+      ]);
+
+      res.status(200).json({ success: true, message: "Donation was success" });
+    } catch (err) {
+      res.status(500).json({ error: "Failed to make donation" });
+    }
   }
-  client.end();
 });
 
 module.exports = router;
