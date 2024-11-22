@@ -1,8 +1,8 @@
 let rescueCentersTableBody = document.getElementById("rescueCenters");
 
 window.onload = async () => {
-    let rescueCentersList = await fetchAllRescueCentersData();
-    console.log(rescueCentersList);
+    let response = await fetchAllRescueCentersData();
+    let rescueCentersList = response.rescueCenters;
     fillRescueCenterTable(rescueCentersList);
 }
 
@@ -16,9 +16,10 @@ async function fetchAllRescueCentersData() {
 
 function fillRescueCenterTable(rescueCentersList) {
     console.log("Filling the table..");
+    console.log(rescueCentersList);
     if(rescueCentersList && rescueCentersList.length > 0) {
-
         rescueCentersList.forEach(center => {
+            console.log(center);
             let row = createRescueCenterRow(center);
             rescueCentersTableBody.appendChild(row);
         });
@@ -27,12 +28,27 @@ function fillRescueCenterTable(rescueCentersList) {
 
 function createRescueCenterRow(center) {
     let row = document.createElement("tr");
-            let centerNameColumn = document.createElement("td");
-            let centerNameText = addText(center.rescue_center_id, center.rescue_center_name);
-            centerNameColumn.appendChild(centerNameText);
-            row.appendChild(centerNameColumn);
-            
-            row.setAttribute("id", center.rescue_center_id);
+    let centerNameColumn = document.createElement("td");
+    let centerNameText = addText(center.rescue_center_id, center.rescue_center_name);
+    centerNameColumn.appendChild(centerNameText);
+    let centerLocationColumn = document.createElement("td");
+    let centerLocationText = addText("location#" + center.rescue_center_id, center.center_location);
+    centerLocationColumn.appendChild(centerLocationText);
+    let centerContactPersonColumn = document.createElement("td");
+    let centerContactPersonRow = document.createElement("tr");
+    let contact_person_id = center.contact_person_id;
+    let contactPersonNameText = addText("name#"+contact_person_id, center.contact_person);
+    let contactPersonEmailText = addText("email#"+contact_person_id, center.email);
+    let contactPersonPhoneText = addText("phone#" + contact_person_id, center.phone);
+    centerContactPersonRow.appendChild(contactPersonNameText);
+    centerContactPersonRow.appendChild(contactPersonEmailText);
+    centerContactPersonRow.appendChild(contactPersonPhoneText);
+    centerContactPersonColumn.appendChild(centerContactPersonRow);
+    row.appendChild(centerNameColumn);
+    row.appendChild(centerLocationColumn);   
+    row.appendChild(centerContactPersonColumn);        
+    row.setAttribute("id", center.rescue_center_id);
+    return row;
 }
 
 

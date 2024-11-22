@@ -11,7 +11,32 @@
 </head>
 <body>
     <!--To-do: Add navigation to other pages-->
-    <h2>List All rescue centers</h2>
+    <h2>Rescue centers</h2>
+    <h5>Filter based on location</h5>
+    <p>
+        <label>
+          <input class="with-gap" name="area" type="radio" id="allProvincesOption"/>
+          <span>Show all</span>
+        </label>
+      </p>
+    <p>
+        <label>
+          <input class="with-gap" name="area" type="radio" id="southernFinlandProvinceOption"/>
+          <span>Etelä-Suomen lääni</span>
+        </label>
+      </p>
+      <p>
+        <label>
+          <input class="with-gap" name="area" type="radio" id="easternFinlandProvinceOption" />
+          <span>Itä-Suomen lääni</span>
+        </label>
+      </p>
+      <p>
+        <label>
+          <input class="with-gap" name="area" type="radio" id="provinceOfOuluOption"/>
+          <span>Oulun lääni</span>
+        </label>
+      </p>
     <div>
         <table id="rescueCenterTable">
             <thead>
