@@ -8,7 +8,7 @@ const pool = new Pool({
     password: 'x', 
     host: 'localhost', 
     port: 5433, 
-    database: 'ProvinceOfOuluDB'
+    database: 'Oulun laani'
 });
 
 module.exports = {
