@@ -1,15 +1,15 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
   <head>
-    <title>Purrfect Match</title>
+    <title>Resgistration</title>
     <link rel="stylesheet" href="/stylesheets/style.css" />
-    <script type="module" src="./javascripts/index.js" defer></script>
+    <script type="module" src="./javascripts/registration.js" defer></script>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
     />
     <link rel="stylesheet" href="./stylesheets/style.css" />
   </head>
-
   <body>
     <nav>
       <div class="nav-wrapper teal">
@@ -40,41 +40,31 @@
         </ul>
       </div>
     </nav>
+    <h2>Registration</h2>
 
-    <h2>Purrfect Match</h2>
-
-    <div>
-      <p>Welcome to Purrfect Match</p>
-      <h4>Select your location</h4>
-      <button
-        id="SouthernFinlandProvinceBtn"
-        class="waves-effect waves-light btn"
-      >
-        Etelä-Suomen lääni
+    <form id="registerForm">
+      <label for="customer_name">Full name (fisrt and last name):</label>
+      <input type="text" id="customer_name" name="name" required /><br />
+      <label for="customer_email">Email:</label>
+      <input type="text" id="customer_email" name="email" required /><br />
+      <label for="customer_phone">Phone:</label>
+      <input type="text" id="customer_phone" name="phone" required /><br />
+      <p>Select your own area</p>
+      <button type="button" id="etela-btn" class="waves-light btn">
+        Eteläsuomen lääni
       </button>
-      <button id="OuluProvinceBtn" class="waves-effect waves-light btn">
+      <button type="button" id="oulu-btn" class="waves-light btn">
         Oulun lääni
       </button>
-      <button
-        id="EasternFinlandProvinceBtn"
-        class="waves-effect waves-light btn"
-      >
-        Itä-Suomen lääni
+      <button type="button" id="ita-btn" class="waves-light btn">
+        Itäsuomen lääni</button
+      ><br />
+      <br />
+      <p>Almost there</p>
+      <button type="button" id="registration-btn" class="waves-light btn">
+        Register
       </button>
-    </div>
-
-    <div id="admin-view" style="display: none">
-      <p>Welcome admin!</p>
-      <button id="openUser" class="waves-effect waves-light btn">
-        Back to user
-      </button>
-    </div>
-
-    <div id="user-view">
-      <p>Welcome User!</p>
-      <button id="openAdmin" class="waves-effect waves-light btn">
-        Admin view
-      </button>
-    </div>
+      <br />
+    </form>
   </body>
 </html>
