@@ -22,6 +22,7 @@ router.get("/data", (req, res) => {
 //New user creates an account
 router.post("/register", async (req, res) => {
   const { name, email, phone, selectedArea } = req.body;
+
   if (selectedArea === "Etelasuomen laani") {
     try {
       const maxIDQuery = await southernFinlandProvinceDB.query(
@@ -77,43 +78,29 @@ router.post("/register", async (req, res) => {
 router.put("/update", async (req, res) => {
   const { name, email, phone, selectedArea, newName, newEmail, newPhone } =
     req.body;
+  try {
+    const query =
+      "UPDATE customers SET customer_name = $1, email=$2, phone=$3 WHERE customer_name = $4 and email = $5 and phone =$6 ";
+    const values = [newName, newEmail, newPhone, name, email, phone];
 
-  if (selectedArea === "Etelasuomen laani") {
-    try {
-      const query =
-        "UPDATE customers SET customer_name = $1, email=$2, phone=$3 WHERE customer_name = $4 and email = $5 and phone =$6 ";
-      const values = [newName, newEmail, newPhone, name, email, phone];
+    if (selectedArea === "Etelasuomen laani") {
       const result = await southernFinlandProvinceDB.query(query, values);
       if (result.rowCount > 0) {
         res.status(200).json({ success: true, message: "Account updated" });
       }
-    } catch (err) {
-      res.status(500).json({ error: "Failed to update account information" });
-    }
-  } else if (selectedArea === "Oulun laani") {
-    try {
-      const query =
-        "UPDATE customers SET customer_name = $1, email=$2, phone=$3 WHERE customer_name = $4 and email = $5 and phone =$6 ";
-      const values = [newName, newEmail, newPhone, name, email, phone];
+    } else if (selectedArea === "Oulun laani") {
       const result = await provinceOfOuluDB.query(query, values);
       if (result.rowCount > 0) {
         res.status(200).json({ success: true, message: "Account updated" });
       }
-    } catch (err) {
-      res.status(500).json({ error: "Failed to update account information" });
-    }
-  } else {
-    try {
-      const query =
-        "UPDATE customers SET customer_name = $1, email=$2, phone=$3 WHERE customer_name = $4 and email = $5 and phone =$6 ";
-      const values = [newName, newEmail, newPhone, name, email, phone];
+    } else {
       const result = await easternFinlandProvinceDB.query(query, values);
       if (result.rowCount > 0) {
         res.status(200).json({ success: true, message: "Account updated" });
       }
-    } catch (err) {
-      res.status(500).json({ error: "Failed to update account information" });
     }
+  } catch (err) {
+    res.status(500).json({ error: "Failed to update account information" });
   }
 });
 
@@ -121,20 +108,19 @@ router.put("/update", async (req, res) => {
 router.post("/usersDonation", async (req, res) => {
   const { name, email, selectedArea } = req.body;
 
-  if (selectedArea === "Etelasuomen laani") {
-    try {
-      const customerQuery =
-        "SELECT customer_ID FROM customers WHERE customer_name = $1 and email = $2";
+  try {
+    const customerQuery =
+      "SELECT customer_ID FROM customers WHERE customer_name = $1 and email = $2";
+
+    if (selectedArea === "Etelasuomen laani") {
       const customerResult = await southernFinlandProvinceDB.query(
         customerQuery,
         [name, email]
       );
-
       if (customerResult.rowCount === 0) {
         res.status(404).json({ error: "Customer not found." });
       }
       const customerID = customerResult.rows[0].customer_id;
-
       try {
         const donationQuery =
           "SELECT rescue_centers.rescue_center_name, donations.amount FROM donations JOIN rescue_centers ON donations.rescue_center_ID = rescue_centers.rescue_center_ID WHERE donations.customer_ID = $1";
@@ -147,13 +133,7 @@ router.post("/usersDonation", async (req, res) => {
       } catch (err) {
         res.status(500).json({ error: "Failed to find donations" });
       }
-    } catch (err) {
-      res.status(500).json({ error: "Failed to find donations" });
-    }
-  } else if (selectedArea === "Oulun laani") {
-    try {
-      const customerQuery =
-        "SELECT customer_ID FROM customers WHERE customer_name = $1 and email = $2";
+    } else if (selectedArea === "Oulun laani") {
       const customerResult = await provinceOfOuluDB.query(customerQuery, [
         name,
         email,
@@ -175,13 +155,7 @@ router.post("/usersDonation", async (req, res) => {
       } catch (err) {
         res.status(500).json({ error: "Failed to find donations" });
       }
-    } catch (err) {
-      res.status(500).json({ error: "Failed to find donations" });
-    }
-  } else {
-    try {
-      const customerQuery =
-        "SELECT customer_ID FROM customers WHERE customer_name = $1 and email = $2";
+    } else {
       const customerResult = await easternFinlandProvinceDB.query(
         customerQuery,
         [name, email]
@@ -204,20 +178,19 @@ router.post("/usersDonation", async (req, res) => {
       } catch (err) {
         res.status(500).json({ error: "Failed to find donations" });
       }
-    } catch (err) {
-      res.status(500).json({ error: "Failed to find donations" });
     }
+  } catch (err) {
+    res.status(500).json({ error: "Failed to find donations" });
   }
 });
 
 //Account check and connect right database
 router.post("/accountCheck", async (req, res) => {
   const { name, email, selectedArea } = req.body;
-
-  if (selectedArea === "Etelasuomen laani") {
-    try {
-      const customerQuery =
-        "SELECT customer_ID FROM customers WHERE customer_name = $1 and email = $2";
+  const customerQuery =
+    "SELECT customer_ID FROM customers WHERE customer_name = $1 and email = $2";
+  try {
+    if (selectedArea === "Etelasuomen laani") {
       const customerResult = await southernFinlandProvinceDB.query(
         customerQuery,
         [name, email]
@@ -237,13 +210,7 @@ router.post("/accountCheck", async (req, res) => {
       } catch (err) {
         res.status(500).json({ error: err.message });
       }
-    } catch (err) {
-      res.status(500).json({ error: "Failed to make donation" });
-    }
-  } else if (selectedArea === "Oulun laani") {
-    try {
-      const customerQuery =
-        "SELECT customer_ID FROM customers WHERE customer_name = $1 and email = $2";
+    } else if (selectedArea === "Oulun laani") {
       const customerResult = await provinceOfOuluDB.query(customerQuery, [
         name,
         email,
@@ -263,13 +230,7 @@ router.post("/accountCheck", async (req, res) => {
       } catch (err) {
         res.status(500).json({ error: err.message });
       }
-    } catch (err) {
-      res.status(500).json({ error: "Failed to make donation" });
-    }
-  } else {
-    try {
-      const customerQuery =
-        "SELECT customer_ID FROM customers WHERE customer_name = $1 and email = $2";
+    } else {
       const customerResult = await easternFinlandProvinceDB.query(
         customerQuery,
         [name, email]
@@ -289,9 +250,9 @@ router.post("/accountCheck", async (req, res) => {
       } catch (err) {
         res.status(500).json({ error: err.message });
       }
-    } catch (err) {
-      res.status(500).json({ error: "Failed to make donation" });
     }
+  } catch (err) {
+    res.status(500).json({ error: "Failed to make donation" });
   }
 });
 
@@ -299,8 +260,8 @@ router.post("/accountCheck", async (req, res) => {
 router.post("/donation", async (req, res) => {
   const { rescueCenterID, customerID, donAmount, selectedArea } = req.body;
 
-  if (selectedArea === "Etelasuomen laani") {
-    try {
+  try {
+    if (selectedArea === "Etelasuomen laani") {
       const maxIDQuery = await southernFinlandProvinceDB.query(
         "SELECT MAX(CAST(SUBSTRING(donation_ID, 7) AS INTEGER)) as max_id FROM donations"
       );
@@ -318,11 +279,7 @@ router.post("/donation", async (req, res) => {
       ]);
 
       res.status(200).json({ success: true, message: "Donation was success" });
-    } catch (err) {
-      res.status(500).json({ error: "Failed to make donation" });
-    }
-  } else if (selectedArea === "Oulun laani") {
-    try {
+    } else if (selectedArea === "Oulun laani") {
       const maxIDQuery = await provinceOfOuluDB.query(
         "SELECT MAX(CAST(SUBSTRING(donation_ID, 7) AS INTEGER)) as max_id FROM donations"
       );
@@ -340,11 +297,7 @@ router.post("/donation", async (req, res) => {
       ]);
 
       res.status(200).json({ success: true, message: "Donation was success" });
-    } catch (err) {
-      res.status(500).json({ error: "Failed to make donation" });
-    }
-  } else {
-    try {
+    } else {
       const maxIDQuery = await easternFinlandProvinceDB.query(
         "SELECT MAX(CAST(SUBSTRING(donation_ID, 7) AS INTEGER)) as max_id FROM donations"
       );
@@ -362,9 +315,9 @@ router.post("/donation", async (req, res) => {
       ]);
 
       res.status(200).json({ success: true, message: "Donation was success" });
-    } catch (err) {
-      res.status(500).json({ error: "Failed to make donation" });
     }
+  } catch (err) {
+    res.status(500).json({ error: "Failed to make donation" });
   }
 });
 
