@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Purrfect Match</title>
+    <title>Purrfect Match Admin</title>
     <link rel="stylesheet" href="/stylesheets/style.css">
     <script type="module" src="./javascripts/admin.js" defer></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
@@ -18,25 +18,7 @@
           </ul>
           <ul id="nav-mobile" class="right hide-on-med-and-down">
             <li>
-              <a
-                href="/registration.html"
-                id="register-btn"
-                class="waves-light btn"
-                >Registration</a
-              >
-            </li>
-            <li>
-              <a href="/donation.html" id="donation-btn" class="waves-light btn"
-                >Make a Donation</a
-              >
-            </li>
-            <li>
-              <a href="/account.html" id="account-btn" class="waves-light btn"
-                >Account</a
-              >
-            </li>
-            <li>
-                <a href="/index.html" id="account-btn" class="waves-light btn"
+                <a href="/index.html" id="userView-btn" class="waves-light btn"
                   >Logout as admin</a>
               </li>
           </ul>
@@ -49,19 +31,53 @@
             <label for="adminName" style="color: black;">Insert your admin name:</label><br>
             <input type="text" id="adminName" name="adminName"><br>
             <label for="adminPassword" style="color: black;">Insert your password:</label><br>
-            <input type="text" id="adminPassword" name="adminPassword"><br>
+            <input type="password" id="adminPassword" name="adminPassword"><br>
           </form>
+          <div id="databaseRadioInsert">
+            <form>
+              <p>from which province you are from?</p>
+              <p>
+                <label>
+                  <input class="with-gap" id='EFP' name="database" type="radio" value="Etelasuomen laani" />
+                  <span style="color: black;">Etelä-Suomen lääni</span>
+                </label>
+              </p>
+              <p>
+                <label>
+                  <input class="with-gap" id='OP' name="database" type="radio" value="Oulun laani"  />
+                  <span style="color: black;">Oulun lääni</span>
+                </label>
+              </p>
+              <p>
+                <label>
+                  <input class="with-gap" id='IFP' name="database" type="radio" value="Itasuomen laani" />
+                  <span style="color: black;">Itä-Suomen lääni</span>
+                </label>
+              </p>
+            </form>
+          </div>
           <button id="adminLoginBTN" class="waves-effect waves-light btn">Login</button>
       </div>
 
     <div id="admin-view" style="display: none;">
         <p>Welcome admin!</p>
-        <div id="removeDataAdmin">
-          <h3>Show donation data</h3>
+
+        <div id="areaData">
+          <h3>show data from area database</h3>
           <div id="donationDatabase">
-            <button id="allDonations" class="waves-effect waves-light btn" >Show all donations</button>
+            <p>Choose data you want to observ:</p>
+            <button id="allAnimals" class="waves-effect waves-light btn" >Animals in area</button>
+            <button id="allResCent" class="waves-effect waves-light btn" >Rescue centers in area</button>
+            <button id="allCustomer" class="waves-effect waves-light btn" >Customers in area</button>
+            <button id="allPerson" class="waves-effect waves-light btn" >Contact persons in area</button>
+            <button id="allDonations" class="waves-effect waves-light btn" >Donations in area</button>
+
+            <div id="tableContainer">
+            
+            </div>
           </div>
-    
+
+     <div id="removeDataAdmin">
           <h4>Remove data from: </h4>
           <button id="removeAnimal" class="waves-effect waves-light btn">Animal</button>
           <button id="removeResCenter" class="waves-effect waves-light btn">Rescue center</button>

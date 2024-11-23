@@ -1,3 +1,7 @@
+//HArd coded pocket for database admin is handling
+let handledDatabase = "";
+
+console.log(handledDatabase);
 //Open admin view
 function toggleView(loginAdmin) {
     const adminView = document.getElementById('admin-view');
@@ -26,8 +30,104 @@ function toggleView(loginAdmin) {
     }
 }
 
-// Lisätään kuuntelijat
-document.getElementById('adminLoginBTN').addEventListener('click', () => toggleView(true));
+function login() {
+    const name = document.getElementById('adminName').value;
+    const password = document.getElementById('adminPassword').value;
+    const database = document.querySelector('input[name="database"]:checked').value
+    handledDatabase = database;
+    toggleView(true)
+    /*if (!name || !password) {
+        alert("Please fill in all fields.");
+        return;
+    }
+    else if (password === "1234" & name === "admin") {
+        
+       toggleView(true)
+    }
+    else {
+        alert("Incorrect password or username")
+    }*/
+}
+document.getElementById('adminLoginBTN').addEventListener('click', () => login());
+
+//Admin prints tables from area database
+function printTables(table) {
+    console.log(handledDatabase)
+    fetch(`/getTable?databaseName=${handledDatabase}&table=${table}`, {
+        method: "GET"
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data)
+        clearTable();
+        createTable(data, table);
+        
+    }).catch(error => {
+        console.error("Error:", error);
+    });
+}
+document.getElementById('allAnimals').addEventListener('click', () => printTables('animals'));
+document.getElementById('allResCent').addEventListener('click', () => printTables('rescue_centers'));
+document.getElementById('allCustomer').addEventListener('click', () => printTables('customers'));
+document.getElementById('allPerson').addEventListener('click', () => printTables('contact_persons'));
+document.getElementById('allDonations').addEventListener('click', () => printTables('donations'));
+
+function clearTable(){
+    const tableContainer = document.getElementById("tableContainer");
+    tableContainer.innerHTML=""
+}
+
+function createTable(data, dataTable) {
+    //const tableHeader = document.createElement("h3");
+    //tableHeader.textContent = header;
+    //tableContainer.appendChild(tableHeader);
+    //tableContainer.innerHTML=""
+    //const objectLength = Object.keys(data[1]).length;
+
+    const table= document.createElement("table");
+    const headerRow = document.createElement("tr");
+    let headers = [];
+
+    if(dataTable === 'animals'){
+        headers = ["animal ID", "Species", "name", "description", "age", "description of needs", "Rescuecenter ID"];
+    }
+    else if(dataTable === 'rescue_centers'){
+        headers = ["Customer ID", "name", "location"];
+    }
+    else if(dataTable === 'customers'){
+        headers = ["Rescue center ID", "name", "email", "phone"];
+    }
+    else if(dataTable === 'contact_persons'){
+        headers = ["Contact person ID", "name", "email", "phone", "rescue center ID"];
+    }
+    else if(dataTable === 'donations'){
+        headers = ["Donation ID", "Customer ID", "Rescue center ID", "amount (e)"];
+    }
+
+    //Creating header row
+    headers.forEach(headerText => {
+        const header = document.createElement("th");
+        header.textContent = headerText;
+        headerRow.appendChild(header);
+    });
+    table.appendChild(headerRow);
+    
+    //creating rest of table
+    data.forEach(item => {
+        const row = document.createElement("tr");
+
+        Object.values(item).forEach(info => {
+            const cell = document.createElement("td");
+            cell.textContent = info;
+            row.appendChild(cell);
+        });
+
+        table.appendChild(row);
+    });
+
+    tableContainer.appendChild(table);
+}
+
 
 
 //Open deletion forms for different database tables
