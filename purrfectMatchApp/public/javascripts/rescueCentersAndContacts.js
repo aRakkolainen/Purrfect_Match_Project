@@ -3,27 +3,52 @@ const showAllRescueCenters = document.getElementById("allProvincesOption");
 const showOnlySouthernFinlandCenters = document.getElementById("southernFinlandProvinceOption");
 const showOnlyEasternFinlandCenters = document.getElementById("easternFinlandProvinceOption");
 const showOnlyProvinceOfOuluCenters = document.getElementById("provinceOfOuluOption");
+const filterBtn = document.getElementById("filterCentersBtn");
 
 window.onload = async () => {
-    let response = await fetchAllRescueCentersData();
-    let rescueCentersList = response.rescueCenters;
-    fillRescueCenterTable(rescueCentersList);
-    showAllRescueCenters.addEventListener("click", () => {
-        
+    filterBtn.addEventListener("click", async () => {
+        console.log("Filtering based on your choice..");
+        clearTable(rescueCentersTableBody, "rescueCenterRow#");
+        if(showAllRescueCenters.checked) {
+            console.log("Showing all rescue centers and their contacts persons..");
+            let url = 'http://localhost:3000/list/rescueCenters';
+            let response = await fetchRescueCentersData(url);
+            let rescueCentersList = response.rescueCenters;
+            fillRescueCenterTable(rescueCentersList);
+        }
+
+        if(showOnlySouthernFinlandCenters.checked) {
+            console.log("Showing rescue centers and their contacts persons in Southern Finland");
+            let url = 'http://localhost:3000/list/rescueCenters/southernFinland';
+            let response = await fetchRescueCentersData(url);
+            let rescueCentersList = response.rescueCenters;
+            fillRescueCenterTable(rescueCentersList);
+        }
+
+        if(showOnlyEasternFinlandCenters.checked) {
+            console.log("Showing rescue centers and their contacts persons in Eastern Finland");
+            let url = 'http://localhost:3000/list/rescueCenters/easternFinland';
+            let response = await fetchRescueCentersData(url);
+            let rescueCentersList = response.rescueCenters;
+            fillRescueCenterTable(rescueCentersList);
+        }
+
+        if(showOnlyProvinceOfOuluCenters.checked) {
+            console.log("Showing rescue centers and their contacts persons in Province of Oulu");
+            let url = 'http://localhost:3000/list/rescueCenters/provinceOfOulu';
+            let response = await fetchRescueCentersData(url);
+            let rescueCentersList = response.rescueCenters;
+            fillRescueCenterTable(rescueCentersList);
+        }
     })
 
-    if(showAllRescueCenters.checked) {
-        console.log("Showing all rescue centers..");
-    } else if(showOnlySouthernFinlandCenters.checked) {
-        console.log("Showing only rescue centers in Southern Finland Area");
-    }
+    
 }
 
 
 
 
-async function fetchAllRescueCentersData() {
-    let url = 'http://localhost:3000/list/rescueCenters';
+async function fetchRescueCentersData(url) {
     let result = await fetch(url);
     let rescueCentersList = await result.json();
     return rescueCentersList;
@@ -33,14 +58,16 @@ async function fetchAllRescueCentersData() {
 function fillRescueCenterTable(rescueCentersList) {
     console.log("Filling the table..");
     if(rescueCentersList && rescueCentersList.length > 0) {
+        let id=0;
         rescueCentersList.forEach(center => {
-            let row = createRescueCenterRow(center);
+            let row = createRescueCenterRow(center, id);
             rescueCentersTableBody.appendChild(row);
+            id++;
         });
     }
 }
 
-function createRescueCenterRow(center) {
+function createRescueCenterRow(center,id) {
     let row = document.createElement("tr");
     let centerNameColumn = document.createElement("td");
     let centerNameText = addText(center.rescue_center_id, center.rescue_center_name);
@@ -61,7 +88,7 @@ function createRescueCenterRow(center) {
     row.appendChild(centerNameColumn);
     row.appendChild(centerLocationColumn);   
     row.appendChild(centerContactPersonColumn);        
-    row.setAttribute("id", center.rescue_center_id);
+    row.setAttribute("id", "rescueCenterRow#" + id);
     return row;
 }
 
@@ -69,8 +96,7 @@ function createRescueCenterRow(center) {
 function clearTable(tableBody, baseID){
     let numberOfRows = tableBody.rows.length;
     for (let i=0; i < numberOfRows; i++) {
-        let id = baseID + i; 
-        let row = document.getElementById(id);
+        let row = document.getElementById(baseID+i);
         tableBody.removeChild(row);
     }
 }

@@ -4,6 +4,7 @@ var router = express.Router();
 let provinceOfOuluDB = require('../db/ProvinceOfOuluDB');
 let southernFinlandProvinceDB = require('../db/SouthernFinlandProvinceDB');
 let easternFinlandProvinceDB = require('../db/EasternFinlandProvinceDB');
+let mainDB = require('../db/MainDB');
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -323,29 +324,46 @@ router.post("/donation", async (req, res) => {
 
 router.get('/list/rescueCenters', async (req, res) => {
     //Fetching data about all rescue centers and their contact persons..
-    let query = 'SELECT * FROM rescue_centers INNER JOIN contact_persons ON contact_persons.rescue_center_id = rescue_centers.rescue_center_id';
+    let query = 'SELECT * FROM rescue_centers INNER JOIN contact_persons ON contact_persons.rescue_center_id = rescue_centers.rescue_center_id ORDER BY rescue_center_name ASC';
     
-    let southernFinlandResults = await southernFinlandProvinceDB.query(query);
-    let rescueCentersSouthernFinland = southernFinlandResults.rows;
-
-    let easternFinlandResults = await easternFinlandProvinceDB.query(query);
-    let rescueCentersEasternFinland = easternFinlandResults.rows;
-
-    let ouluResults = await provinceOfOuluDB.query(query);
-    let rescueCentersOulu = ouluResults.rows;
-
-    let southernAndEast = rescueCentersSouthernFinland.concat(rescueCentersEasternFinland);
-    let allRescueCenters = southernAndEast.concat(rescueCentersOulu);
+    let allResults = await mainDB.query(query);
+    let allRescueCenters = allResults.rows;
     let result = {
       rescueCenters: allRescueCenters
     }
     res.json(result);
 
-  
-
-
-
-
 });
+
+router.get('/list/rescueCenters/southernFinland', async (req, res) => {
+    console.log("Fetching data only from Southern Finland..");
+    let southernQuery = 'SELECT * FROM "Etelasuomen laanin rescue centers" INNER JOIN "Etelasuomen laanin contact persons" ON "Etelasuomen laanin contact persons".rescue_center_id = "Etelasuomen laanin rescue centers".rescue_center_id ORDER BY rescue_center_name ASC'
+    let southernFinlandResults = await mainDB.query(southernQuery);
+    let southernRescueCenters = southernFinlandResults.rows;
+    let result = {
+      rescueCenters: southernRescueCenters
+    }
+    res.json(result);
+})
+
+router.get('/list/rescueCenters/easternFinland', async (req, res) => {
+    let easternQuery = 'SELECT * FROM "Itasuomen laanin rescue centers" INNER JOIN "Itasuomen laanin contact persons" ON "Itasuomen laanin contact persons".rescue_center_id = "Itasuomen laanin rescue centers".rescue_center_id ORDER BY rescue_center_name ASC'
+    let easternFinlandResults = await mainDB.query(easternQuery);
+    let easternFinlandRescueCenters = easternFinlandResults.rows;
+    let result = {
+      rescueCenters: easternFinlandRescueCenters
+    }
+    res.json(result);
+})
+
+router.get('/list/rescueCenters/provinceOfOulu', async (req, res) => {
+  let ouluQuery = 'SELECT * FROM "Oulun laanin rescue centers" INNER JOIN "Oulun laanin contact persons" ON "Oulun laanin contact persons".rescue_center_id = "Oulun laanin rescue centers".rescue_center_id ORDER BY rescue_center_name ASC'
+  let provinceOfOuluResults = await mainDB.query(ouluQuery);
+  let provinceOfOuluRescueCenters = provinceOfOuluResults.rows;
+  let result = {
+    rescueCenters: provinceOfOuluRescueCenters
+  }
+  res.json(result);
+})
 
 module.exports = router;

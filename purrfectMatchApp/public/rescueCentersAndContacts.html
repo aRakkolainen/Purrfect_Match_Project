@@ -36,16 +36,16 @@
       </ul>
     </div>
   </nav>
-    <!--To-do: Add navigation to other pages-->
-    <h2>Rescue centers</h2>
+    <h2>Rescue centers and their contact persons</h2>
     <h5>Choose location for filtering</h5>
-    <p>
+    <div id="filterOptions">
+      <p>
         <label>
-          <input class="with-gap" name="area" type="radio" id="allProvincesOption"/>
-          <span>Show all</span>
+          <input class="with-gap" name="area" type="radio" id="allProvincesOption" checked/>
+          <span>Show all in alphabetical order</span>
         </label>
       </p>
-    <p>
+      <p>
         <label>
           <input class="with-gap" name="area" type="radio" id="southernFinlandProvinceOption"/>
           <span>Etelä-Suomen lääni</span>
@@ -62,8 +62,9 @@
           <input class="with-gap" name="area" type="radio" id="provinceOfOuluOption"/>
           <span>Oulun lääni</span>
         </label>
+      </div>
         <br>
-        <button id="filterCenters">Filter</button>
+        <button id="filterCentersBtn" class="waves-light btn">Filter</button>
 
       </p>
     <div>
