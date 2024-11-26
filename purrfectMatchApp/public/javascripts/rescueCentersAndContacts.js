@@ -20,29 +20,29 @@ window.onload = async () => {
         if(showOnlySouthernFinlandCenters.checked) {
             console.log("Showing rescue centers and their contacts persons in Southern Finland");
             let url = 'http://localhost:3000/list/rescueCenters/southernFinland';
-            let response = await fetchRescueCentersData(url);
-            let rescueCentersList = response.rescueCenters;
-            fillRescueCenterTable(rescueCentersList);
+            await fetchAndFillTable(url);
         }
 
         if(showOnlyEasternFinlandCenters.checked) {
             console.log("Showing rescue centers and their contacts persons in Eastern Finland");
             let url = 'http://localhost:3000/list/rescueCenters/easternFinland';
-            let response = await fetchRescueCentersData(url);
-            let rescueCentersList = response.rescueCenters;
-            fillRescueCenterTable(rescueCentersList);
+            await fetchAndFillTable(url);
         }
 
         if(showOnlyProvinceOfOuluCenters.checked) {
             console.log("Showing rescue centers and their contacts persons in Province of Oulu");
             let url = 'http://localhost:3000/list/rescueCenters/provinceOfOulu';
-            let response = await fetchRescueCentersData(url);
-            let rescueCentersList = response.rescueCenters;
-            fillRescueCenterTable(rescueCentersList);
+            await fetchAndFillTable(url);
         }
     })
 
     
+}
+
+async function fetchAndFillTable(url) {
+    let response = await fetchRescueCentersData(url);
+    let rescueCentersList = response.rescueCenters;
+    fillRescueCenterTable(rescueCentersList);
 }
 
 

@@ -366,4 +366,43 @@ router.get('/list/rescueCenters/provinceOfOulu', async (req, res) => {
   res.json(result);
 })
 
+
+//Fetches animals and their rescue centers based on given area
+router.get('/list/rescueCenters/animals/:area', async(req, res) => {
+  let area = req.params.area;
+  let result = {};
+  
+  let animalsQuery = '';
+  switch(area){
+      case ("southernFinlandProvince"):
+          animalsQuery = 'SELECT "Etelasuomen laanin animals".rescue_center_id, rescue_center_name, animal_id, species, animal_name, animal_description, age, requirement_description FROM "Etelasuomen laanin rescue centers" INNER JOIN "Etelasuomen laanin animals" ON "Etelasuomen laanin animals".rescue_center_id = "Etelasuomen laanin rescue centers".rescue_center_id ORDER BY rescue_center_name ASC';
+          break;
+      case("easternFinlandProvince"):
+          animalsQuery = 'SELECT "Itasuomen laanin animals".rescue_center_id, rescue_center_name, animal_id, species, animal_name, animal_description, age, requirement_description FROM "Itasuomen laanin rescue centers" INNER JOIN "Itasuomen laanin animals" ON "Itasuomen laanin animals".rescue_center_id = "Itasuomen laanin rescue centers".rescue_center_id ORDER BY rescue_center_name ASC';
+          break;
+      case("provinceOfOulu"):
+          animalsQuery = 'SELECT "Oulun laanin animals".rescue_center_id, rescue_center_name, animal_id, species, animal_name, animal_description, age, requirement_description FROM "Oulun laanin rescue centers" INNER JOIN "Oulun laanin animals" ON "Oulun laanin animals".rescue_center_id = "Oulun laanin rescue centers".rescue_center_id ORDER BY rescue_center_name ASC';
+          break;
+      default:
+          animalsQuery = 'SELECT animal_id, species, animal_name, animal_description, age, requirement_description, animals.rescue_center_id, rescue_center_name FROM public.animals INNER JOIN rescue_centers ON rescue_centers.rescue_center_id = animals.rescue_center_id ORDER BY rescue_center_name ASC;';
+          break;
+  }
+  try {
+    let results = await mainDB.query(animalsQuery);
+    result = {
+      rescueCenterAnimals: results.rows
+    }
+  } catch(error){
+    console.error(error);
+    result = {
+      rescueCenterAnimals: [],
+      errorMsg: 'Error occured: ' + error
+    }
+  }
+  console.log(result);
+  res.json(result);
+
+
+})
+
 module.exports = router;
