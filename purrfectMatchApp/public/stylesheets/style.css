@@ -32,3 +32,23 @@ h3#rescueCenterHeader{
 p.textBox{
   font-size:large;
 }
+
+.pagination {
+  display: flex;
+  flex-flow: row nowrap;
+  gap: 4px;
+}
+
+.hidden{
+  visibility: hidden;
+}
+
+.visible{
+  visibility: visible;
+}
+
+#paginationLabel {
+  font-size: medium;
+  text-align: center;
+}
+

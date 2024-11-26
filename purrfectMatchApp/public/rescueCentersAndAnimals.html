@@ -37,42 +37,42 @@
         </div>
       </nav>
       <h2>Rescue centers and their animals</h2>
-      <h5>Choose location for filtering</h5>
-    <div id="filterOptions">
-      <p>
-        <label>
-          <input class="with-gap" name="area" type="radio" id="allProvincesOption" checked/>
-          <span>Show all in alphabetical order</span>
-        </label>
-      </p>
-      <p>
-        <label>
-          <input class="with-gap" name="area" type="radio" id="southernFinlandProvinceOption"/>
-          <span>Etelä-Suomen lääni</span>
-        </label>
-      </p>
-      <p>
-        <label>
-          <input class="with-gap" name="area" type="radio" id="easternFinlandProvinceOption" />
-          <span>Itä-Suomen lääni</span>
-        </label>
-      </p>
-      <p>
-        <label>
-          <input class="with-gap" name="area" type="radio" id="provinceOfOuluOption"/>
-          <span>Oulun lääni</span>
-        </label>
-      </div>
+      <h5>Choose location</h5>
+      <div id="filterOptions">
+        <p>
+          <label>
+            <input class="with-gap" name="area" type="radio" id="allProvincesOption" checked/>
+            <span>Show all in alphabetical order</span>
+          </label>
+        </p>
+        <p>
+          <label>
+            <input class="with-gap" name="area" type="radio" id="southernFinlandProvinceOption"/>
+            <span>Etelä-Suomen lääni</span>
+          </label>
+        </p>
+        <p>
+          <label>
+            <input class="with-gap" name="area" type="radio" id="easternFinlandProvinceOption" />
+            <span>Itä-Suomen lääni</span>
+          </label>
+        </p>
+        <p>
+          <label>
+            <input class="with-gap" name="area" type="radio" id="provinceOfOuluOption"/>
+            <span>Oulun lääni</span>
+          </label>
+        </div>
         <br>
-        <button id="filterCentersBtn" class="waves-light btn">Filter</button>
-
+        <button id="filterCentersBtn" class="waves-light btn">Search</button>
+        
       </p>
-    <div>
-
+      <div>
+        <label for="pagination" class="hidden" id="paginationLabel">Navigate pages</label>
+        <div id="pagination" class="pagination"></div>
       <ul id="rescueCenterAnimals">
         
       </ul>
-
-    
+      <button id="backToTopBtn" class="hidden" name="hidden">Back To Top</button>
 </body>
 </html>
