@@ -141,7 +141,6 @@ function toggleRemoveView(showForm) {
     const animalInfo = document.getElementById('animalInfo');
     const rescueInfo = document.getElementById('rescueInfo');
     const customerInfo = document.getElementById('customerInfo');
-    //const personInfo = document.getElementById('personInfo');
     const removeItem = document.getElementById('removeItem');
     const removeBTN = document.getElementById('removeBTN');
 
@@ -151,9 +150,7 @@ function toggleRemoveView(showForm) {
         rescueInfo.style.display = 'block';
     } else if (showForm === 'customer') {
         customerInfo.style.display = 'block';
-    } /*else if (showForm === 'person') {
-        personInfo.style.display = 'block';
-    }*/
+    }
 
     removeItem.style.display = 'block';
     removeBTN.style.display = 'block';
@@ -161,14 +158,12 @@ function toggleRemoveView(showForm) {
 document.getElementById('removeAnimal').addEventListener('click', () => toggleRemoveView('animal'));
 document.getElementById('removeResCenter').addEventListener('click', () => toggleRemoveView('rescue'));
 document.getElementById('removeCustomer').addEventListener('click', () => toggleRemoveView('customer'));
-//document.getElementById('removeContact').addEventListener('click', () => toggleRemoveView('person'));
 
 //Open modify forms for different database tables
 function toggleModifyView(showForm) {
     const modifyAnimal = document.getElementById('modifyAnimalForm');
     const modifyRescue = document.getElementById('modifyRescueForm');   
     const modifyPerson = document.getElementById('modifyPersonForm');
-    //const databaseRadio = document.getElementById('databaseRadio');
     const modifyBTN = document.getElementById('modifyBTN');
 
     if (showForm === 'animals') {
@@ -179,7 +174,6 @@ function toggleModifyView(showForm) {
         modifyPerson.style.display = 'block';
     }
 
-    //databaseRadio.style.display = 'block';
     modifyBTN.style.display = 'block';
 }
 document.getElementById('modifyAnimal').addEventListener('click', () => toggleModifyView('animals'));
@@ -190,7 +184,6 @@ document.getElementById('modifyContact').addEventListener('click', () => toggleM
 async function toggleInsertView(showForm) {
     const insertAnimal = document.getElementById('insertAnimalForm');
     const insertRescue = document.getElementById('insertRescueForm');
-    const databaseRadio = document.getElementById('databaseRadioInsert');
     const insertBTN = document.getElementById('insertBTN');
 
     if (showForm === 'animals') {
@@ -203,7 +196,6 @@ async function toggleInsertView(showForm) {
         insertAnimal.style.display = 'none';
     }
 
-    databaseRadio.style.display = 'block';
     insertBTN.style.display = 'block';
 
     const newInsertBTN = insertBTN.cloneNode(true);
@@ -211,9 +203,6 @@ async function toggleInsertView(showForm) {
 
 
     newInsertBTN.addEventListener('click', async () => {
-
-        /*const id = await countData(showForm) + 1
-        console.log(id)*/
 
         let data = [];
 
@@ -248,24 +237,10 @@ async function toggleInsertView(showForm) {
         }
         insertData(showForm, data);
     })
-    //insertBTN.addEventListener('click', () => insertData(showForm, data));
+
 }
 document.getElementById('insertAnimal').addEventListener('click', () => toggleInsertView('animals'));
 document.getElementById('insertResCenter').addEventListener('click', () => toggleInsertView('rescue_centers'));
-
-/*async function countData(table){
-    try{
-       const response = await fetch(`/getTable?databaseName=${handledDatabase}&table=${table}`, {
-           method: "GET"
-       });
-       const data = await response.json();
-       const length = data.length; 
-       return length;
-    }
-    catch (err){
-       console.log("Error:",err);
-    }   
-}*/
 
 function insertData(tableName, data){
     console.log(data)
@@ -278,7 +253,19 @@ function insertData(tableName, data){
     })
     .then(response => response.json())
     .then(data => {
-        console.log(data)
+        if (data.success === true){
+            alert("data inserted successfully")
+            document.getElementById('insertAnimalForm').reset();
+            document.getElementById('insertRescueForm').reset();
+            document.getElementById('insertAnimalForm').style.display = 'none';
+            document.getElementById('insertRescueForm').style.display = 'none';
+            document.getElementById('insertBTN').style.display = 'none';
+        }
+        else {
+            
+            alert("something went wrong")
+        }
+
         
     }).catch(error => {
         console.error("Error:", error);

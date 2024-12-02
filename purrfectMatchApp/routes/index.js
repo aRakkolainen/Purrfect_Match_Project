@@ -22,7 +22,7 @@ router.get('/getTable', async (req,res) => {
   try {
     const db = getDatabaseConnection(databaseName);
     data = await db.query('SELECT * FROM '+ table);
-    
+
     let dataset = data.rows;
     res.json(dataset);  // Send the query result to the frontend as JSON
     } catch (err) {
@@ -80,6 +80,9 @@ router.post('/insertData', async (req, res) => {
 
       await db.query(queryTextResCenter, rescueValues);
       await db.query(quarytextConPerson, personValues);
+
+      await mainDB.query(queryTextResCenter, rescueValues);
+      await mainDB.query(quarytextConPerson, personValues);
     }
     res.json({ success: true });  // Send the query result to the frontend as JSON
     } catch (err) {
