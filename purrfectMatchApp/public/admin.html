@@ -60,10 +60,10 @@
       </div>
 
     <div id="admin-view" style="display: none;">
-        <p>Welcome admin!</p>
+        <p id="welcomeText">Welcome admin!</p>
 
         <div id="areaData">
-          <h3>show data from area database</h3>
+          <h3 id="areaSpesfication">show data from area database</h3>
           <div id="donationDatabase">
             <p>Choose data you want to observ:</p>
             <button id="allAnimals" class="waves-effect waves-light btn" >Animals in area</button>
@@ -160,11 +160,21 @@
             <label for="insertAnimalName" style="color: black;">Name of animal:</label><br>
             <input type="text" id="insertAnimalName" name="insertAnimalName"><br>
             <label for="insertSpecies" style="color: black;">Species of animal:</label><br>
-            <input type="text" id="insertSpecies" name="insertSpecies"><br>
+            <select class="browser-default" id="insertSpecies">
+              <option value="" disabled selected>Choose species</option>
+              <option value="Dog">A dog</option>
+              <option value="Cat">A cat</option>
+              <option value="Bunny">A bunny</option>
+              <option value="Guineabig">A guineabig</option>
+              <option value="Bird">a bird</option>
+              <option value="Other">Other species</option>
+            </select><br>
             <label for="insertDesc" style="color: black;">Short description of animal:</label><br>
             <input type="text" id="insertDesc" name="insertDesc"><br>
             <label for="insertAge" style="color: black;">Age of animal:</label><br>
             <input type="number" id="insertAge" name="insertAge" min="0"><br>
+            <label for="insertRequirement" style="color: black;">Short description of animal's requirements:</label><br>
+            <input type="text" id="insertRequirement" name="insertRequirement"><br>
             <label for="insertRescue" style="color: black;">Rescue center:</label><br>
             <input type="text" id="insertRescue" name="insertRescue"><br>
           </form>
@@ -186,6 +196,6 @@
           </form>
     
           <button id="insertBTN" style="display: none" class="waves-effect waves-light btn">Insert</button>
-          
+        </div>
 </body>
 </html>

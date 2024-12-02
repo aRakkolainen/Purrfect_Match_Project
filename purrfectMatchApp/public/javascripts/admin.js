@@ -1,9 +1,11 @@
+//const { get } = require("http");
+
 //HArd coded pocket for database admin is handling
 let handledDatabase = "";
 
 console.log(handledDatabase);
 //Open admin view
-function toggleView(loginAdmin) {
+function toggleView(loginAdmin, user) {
     const adminView = document.getElementById('admin-view');
     const loginView = document.getElementById('loginAsAdmin');
 
@@ -17,6 +19,10 @@ function toggleView(loginAdmin) {
 
     if (loginAdmin) {
         adminView.style.display = 'block';
+        let welcome = document.getElementById('welcomeText');
+        welcome.innerHTML = 'Welcome admin ' + user;
+        let specification = document.getElementById('areaSpesfication');
+        specification.innerHTML = `Show data from ${handledDatabase} database`;
         loginView.style.display = 'none';
     } else {
         adminView.style.display = 'none';
@@ -35,12 +41,12 @@ function login() {
     const password = document.getElementById('adminPassword').value;
     const database = document.querySelector('input[name="database"]:checked').value
     handledDatabase = database;
-    toggleView(true)
+    toggleView(true, name)
     /*if (!name || !password) {
         alert("Please fill in all fields.");
         return;
     }
-    else if (password === "1234" & name === "admin") {
+    else if (password === "1234") {
         
        toggleView(true)
     }
@@ -139,11 +145,6 @@ function toggleRemoveView(showForm) {
     const removeItem = document.getElementById('removeItem');
     const removeBTN = document.getElementById('removeBTN');
 
-    animalInfo.style.display = 'none';
-    rescueInfo.style.display = 'none';
-    customerInfo.style.display = 'none';
-    //personInfo.style.display = 'none';
-
     if (showForm === 'animal') {
         animalInfo.style.display = 'block';
     } else if (showForm === 'rescue') {
@@ -170,11 +171,7 @@ function toggleModifyView(showForm) {
     //const databaseRadio = document.getElementById('databaseRadio');
     const modifyBTN = document.getElementById('modifyBTN');
 
-    modifyAnimal.style.display = 'none';
-    modifyRescue.style.display = 'none';
-    modifyPerson.style.display = 'none';
-
-    if (showForm === 'animal') {
+    if (showForm === 'animals') {
         modifyAnimal.style.display = 'block';
     } else if (showForm === 'rescue') {
         modifyRescue.style.display = 'block';
@@ -185,29 +182,105 @@ function toggleModifyView(showForm) {
     //databaseRadio.style.display = 'block';
     modifyBTN.style.display = 'block';
 }
-document.getElementById('modifyAnimal').addEventListener('click', () => toggleModifyView('animal'));
+document.getElementById('modifyAnimal').addEventListener('click', () => toggleModifyView('animals'));
 document.getElementById('modifyResCenter').addEventListener('click', () => toggleModifyView('rescue'));
 document.getElementById('modifyContact').addEventListener('click', () => toggleModifyView('person'));
 
 //Open insert forms for different database tables
-function toggleInsertView(showForm) {
+async function toggleInsertView(showForm) {
     const insertAnimal = document.getElementById('insertAnimalForm');
     const insertRescue = document.getElementById('insertRescueForm');
     const databaseRadio = document.getElementById('databaseRadioInsert');
     const insertBTN = document.getElementById('insertBTN');
 
-    insertAnimal.style.display = 'none';
-    insertRescue.style.display = 'none';
-
-    if (showForm === 'animal') {
+    if (showForm === 'animals') {
         insertAnimal.style.display = 'block';
-    } else if (showForm === 'rescue') {
+        insertRescue.reset();
+        insertRescue.style.display = 'none';
+    } else if (showForm === 'rescue_centers') {
         insertRescue.style.display = 'block';
+        insertAnimal.reset();
+        insertAnimal.style.display = 'none';
     }
 
     databaseRadio.style.display = 'block';
     insertBTN.style.display = 'block';
-}
-document.getElementById('insertAnimal').addEventListener('click', () => toggleInsertView('animal'));
-document.getElementById('insertResCenter').addEventListener('click', () => toggleInsertView('rescue'));
 
+    const newInsertBTN = insertBTN.cloneNode(true);
+    insertBTN.parentNode.replaceChild(newInsertBTN, insertBTN);
+
+
+    newInsertBTN.addEventListener('click', async () => {
+
+        /*const id = await countData(showForm) + 1
+        console.log(id)*/
+
+        let data = [];
+
+        if (showForm === 'animals') {
+            const animalName = document.getElementById('insertAnimalName').value;
+            const species = document.getElementById('insertSpecies').value;
+            const description = document.getElementById('insertDesc').value;
+            const age = document.getElementById('insertAge').value;
+            const requirements = document.getElementById('insertRequirement').value;
+            const rescue= document.getElementById('insertRescue').value;
+
+        if (!animalName || !species || !description || !age || !requirements || !rescue) {
+            alert("Please fill in all fields.");
+            return;
+        }
+
+        data = [species, animalName, description, age, requirements, rescue];
+        }
+        else if (showForm === 'rescue_centers'){
+            const centerName = document.getElementById('insertRescueName').value;
+            const address = document.getElementById('insertAddressResc').value;
+    
+            const contactName = document.getElementById('insertPersonName').value;
+            const email = document.getElementById('insertPersonEmail').value;
+            const phone = document.getElementById('insertPersonPhone').value;
+    
+            if (!centerName || !address || !contactName || !email || !phone) {
+                alert("Please fill in all fields.");
+                return;
+            }
+            data = [centerName, address, contactName, email, phone];
+        }
+        insertData(showForm, data);
+    })
+    //insertBTN.addEventListener('click', () => insertData(showForm, data));
+}
+document.getElementById('insertAnimal').addEventListener('click', () => toggleInsertView('animals'));
+document.getElementById('insertResCenter').addEventListener('click', () => toggleInsertView('rescue_centers'));
+
+/*async function countData(table){
+    try{
+       const response = await fetch(`/getTable?databaseName=${handledDatabase}&table=${table}`, {
+           method: "GET"
+       });
+       const data = await response.json();
+       const length = data.length; 
+       return length;
+    }
+    catch (err){
+       console.log("Error:",err);
+    }   
+}*/
+
+function insertData(tableName, data){
+    console.log(data)
+    fetch(`/insertData?databaseName=${handledDatabase}&table=${tableName}`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ data })
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data)
+        
+    }).catch(error => {
+        console.error("Error:", error);
+    });
+}
