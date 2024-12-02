@@ -135,14 +135,14 @@ function toggleRemoveView(showForm) {
     const animalInfo = document.getElementById('animalInfo');
     const rescueInfo = document.getElementById('rescueInfo');
     const customerInfo = document.getElementById('customerInfo');
-    const personInfo = document.getElementById('personInfo');
+    //const personInfo = document.getElementById('personInfo');
     const removeItem = document.getElementById('removeItem');
-    const database = document.getElementById('removableDatabase');
+    const removeBTN = document.getElementById('removeBTN');
 
     animalInfo.style.display = 'none';
     rescueInfo.style.display = 'none';
     customerInfo.style.display = 'none';
-    personInfo.style.display = 'none';
+    //personInfo.style.display = 'none';
 
     if (showForm === 'animal') {
         animalInfo.style.display = 'block';
@@ -150,24 +150,24 @@ function toggleRemoveView(showForm) {
         rescueInfo.style.display = 'block';
     } else if (showForm === 'customer') {
         customerInfo.style.display = 'block';
-    } else if (showForm === 'person') {
+    } /*else if (showForm === 'person') {
         personInfo.style.display = 'block';
-    }
+    }*/
 
     removeItem.style.display = 'block';
-    database.style.display = 'block';
+    removeBTN.style.display = 'block';
 }
 document.getElementById('removeAnimal').addEventListener('click', () => toggleRemoveView('animal'));
 document.getElementById('removeResCenter').addEventListener('click', () => toggleRemoveView('rescue'));
 document.getElementById('removeCustomer').addEventListener('click', () => toggleRemoveView('customer'));
-document.getElementById('removeContact').addEventListener('click', () => toggleRemoveView('person'));
+//document.getElementById('removeContact').addEventListener('click', () => toggleRemoveView('person'));
 
 //Open modify forms for different database tables
 function toggleModifyView(showForm) {
     const modifyAnimal = document.getElementById('modifyAnimalForm');
     const modifyRescue = document.getElementById('modifyRescueForm');   
     const modifyPerson = document.getElementById('modifyPersonForm');
-    const databaseRadio = document.getElementById('databaseRadio');
+    //const databaseRadio = document.getElementById('databaseRadio');
     const modifyBTN = document.getElementById('modifyBTN');
 
     modifyAnimal.style.display = 'none';
@@ -182,7 +182,7 @@ function toggleModifyView(showForm) {
         modifyPerson.style.display = 'block';
     }
 
-    databaseRadio.style.display = 'block';
+    //databaseRadio.style.display = 'block';
     modifyBTN.style.display = 'block';
 }
 document.getElementById('modifyAnimal').addEventListener('click', () => toggleModifyView('animal'));

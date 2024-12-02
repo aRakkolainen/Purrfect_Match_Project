@@ -82,24 +82,16 @@
           <button id="removeAnimal" class="waves-effect waves-light btn">Animal</button>
           <button id="removeResCenter" class="waves-effect waves-light btn">Rescue center</button>
           <button id="removeCustomer" class="waves-effect waves-light btn">Customer</button>
-          <button id="removeContact" class="waves-effect waves-light btn">Contact Person</button>
     
           <p id="animalInfo" style="display: none">Give name of animal</p>
           <p id="rescueInfo" style="display: none">Give name of rescue senter</p>
           <p id="customerInfo"  style="display: none">Give name of customer</p>
-          <p id="personInfo" style="display: none">Give name of contact person</p>
     
           <form id="removeItem" style="display: none">
             <label for="itemName" style="color: black;">Insert name:</label><br>
             <input type="text" id="itemName" name="itemName"><br>
           </form>
-    
-          <div id="removableDatabase" style="display: none" >
-            <p>Chooce database</p>
-            <button id="SFPRemoveBTN" class="waves-effect waves-light btn" >Etelä-Suomen lääni</button>
-            <button id="OPRemoveBTN" class="waves-effect waves-light btn" >Oulun lääni</button>
-            <button id="EFPRemoveBTN" class="waves-effect waves-light btn" > Itä-Suomen lääni</button>
-          </div>
+          <button id="removeBTN" class="waves-effect waves-light btn" style="display: none;">Remove</button>
         </div>
         <br>
     
@@ -152,32 +144,8 @@
             <label for="ContactResc" style="color: black;">New name of rescue center:</label><br>
             <input type="text" id="ContactResc" name="ContactResc"><br>
           </form>
-    
-          <div id="databaseRadio" style="display: none">
-            <form>
-              <p>Which database you want to modify</p>
-              <p>
-                <label>
-                  <input class="with-gap" name="database" type="radio" value="EFP" />
-                  <span style="color: black;">Etelä-Suomen lääni</span>
-                </label>
-              </p>
-              <p>
-                <label>
-                  <input class="with-gap" name="database" type="radio" value="OP"  />
-                  <span style="color: black;">Oulun lääni</span>
-                </label>
-              </p>
-              <p>
-                <label>
-                  <input class="with-gap" name="database" type="radio" value="IFP" />
-                  <span style="color: black;">Itä-Suomen lääni</span>
-                </label>
-              </p>
-            </form>
-          </div>
-    
-          <button id="modifyBTN" style="display: none" class="waves-effect waves-light btn">Submit</button>
+        
+          <button id="modifyBTN" style="display: none" class="waves-effect waves-light btn">Modify</button>
     
         </div>
     
@@ -217,33 +185,7 @@
             <input type="text" id="insertPersonPhone" name="insertPersonPhone"><br>
           </form>
     
-    
-    
-          <div id="databaseRadioInsert" style="display: none">
-            <form>
-              <p>Which database you want to modify</p>
-              <p>
-                <label>
-                  <input class="with-gap" name="database" type="radio" value="EFP" />
-                  <span style="color: black;">Etelä-Suomen lääni</span>
-                </label>
-              </p>
-              <p>
-                <label>
-                  <input class="with-gap" name="database" type="radio" value="OP"  />
-                  <span style="color: black;">Oulun lääni</span>
-                </label>
-              </p>
-              <p>
-                <label>
-                  <input class="with-gap" name="database" type="radio" value="IFP" />
-                  <span style="color: black;">Itä-Suomen lääni</span>
-                </label>
-              </p>
-            </form>
-          </div>
-    
-          <button id="insertBTN" style="display: none" class="waves-effect waves-light btn">Submit</button>
+          <button id="insertBTN" style="display: none" class="waves-effect waves-light btn">Insert</button>
           
 </body>
 </html>
