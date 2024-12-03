@@ -141,23 +141,78 @@ function toggleRemoveView(showForm) {
     const animalInfo = document.getElementById('animalInfo');
     const rescueInfo = document.getElementById('rescueInfo');
     const customerInfo = document.getElementById('customerInfo');
-    const removeItem = document.getElementById('removeItem');
+    const removeItem = document.getElementById('removeItemForm');
     const removeBTN = document.getElementById('removeBTN');
 
-    if (showForm === 'animal') {
+    if (showForm === 'animals') {
         animalInfo.style.display = 'block';
-    } else if (showForm === 'rescue') {
+        rescueInfo.style.display = 'none';
+        customerInfo.style.display = 'none';
+    } else if (showForm === 'rescue_centers') {
         rescueInfo.style.display = 'block';
-    } else if (showForm === 'customer') {
+        animalInfo.style.display = 'none';
+        customerInfo.style.display = 'none';
+    } else if (showForm === 'customers') {
         customerInfo.style.display = 'block';
+        rescueInfo.style.display = 'none';
+        animalInfo.style.display = 'none';
     }
 
     removeItem.style.display = 'block';
     removeBTN.style.display = 'block';
+
+    const newRemoveBTN = removeBTN.cloneNode(true);
+    removeBTN.parentNode.replaceChild(newRemoveBTN, removeBTN);
+
+
+    newRemoveBTN.addEventListener('click',async () => {
+        const itemID = document.getElementById('itemID').value;
+        const itemName = document.getElementById('itemName').value;
+        if (!itemID || !itemName) {
+            alert("Please Give an ID and name");
+            return;
+        }
+        let itemData = [itemID, itemName]
+        await removeData(showForm, itemData)
+    })
 }
-document.getElementById('removeAnimal').addEventListener('click', () => toggleRemoveView('animal'));
-document.getElementById('removeResCenter').addEventListener('click', () => toggleRemoveView('rescue'));
-document.getElementById('removeCustomer').addEventListener('click', () => toggleRemoveView('customer'));
+document.getElementById('removeAnimal').addEventListener('click', () => toggleRemoveView('animals'));
+document.getElementById('removeResCenter').addEventListener('click', () => toggleRemoveView('rescue_centers'));
+document.getElementById('removeCustomer').addEventListener('click', () => toggleRemoveView('customers'));
+
+
+function removeData(tableName, itemData) {
+
+    fetch(`/removeData?databaseName=${handledDatabase}&table=${tableName}`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ itemData })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success === true){
+            alert("data removed successfully");
+            const removeItem = document.getElementById('removeItemForm');
+            removeItem.reset();
+            removeItem.style.display = 'none';
+            document.getElementById('animalInfo').style.display = 'none';
+            document.getElementById('rescueInfo').style.display = 'none';
+            document.getElementById('customerInfo').style.display = 'none';
+            document.getElementById('removeBTN').style.display = 'none';
+        }
+        else {
+            alert("something went wrong")
+        }
+        
+    }).catch(error => {
+        console.error("Error:", error);
+    });
+
+}
+
+
 
 //Open modify forms for different database tables
 function toggleModifyView(showForm) {
@@ -168,16 +223,29 @@ function toggleModifyView(showForm) {
 
     if (showForm === 'animals') {
         modifyAnimal.style.display = 'block';
+        modifyRescue.reset();
+        modifyRescue.style.display = 'none';
+        modifyPerson.reset();
+        modifyPerson.style.display = 'none';
     } else if (showForm === 'rescue') {
         modifyRescue.style.display = 'block';
+        modifyAnimal.reset();
+        modifyAnimal.style.display = 'none';
+        modifyPerson.reset();
+        modifyPerson.style.display = 'none';
     } else if (showForm === 'person') {
         modifyPerson.style.display = 'block';
+        modifyAnimal.reset();
+        modifyAnimal.style.display = 'none';
+        modifyRescue.reset();
+        modifyRescue.style.display = 'none';
     }
 
     modifyBTN.style.display = 'block';
+
 }
 document.getElementById('modifyAnimal').addEventListener('click', () => toggleModifyView('animals'));
-document.getElementById('modifyResCenter').addEventListener('click', () => toggleModifyView('rescue'));
+document.getElementById('modifyResCenter').addEventListener('click', () => toggleModifyView('rescue_centers'));
 document.getElementById('modifyContact').addEventListener('click', () => toggleModifyView('person'));
 
 //Open insert forms for different database tables

@@ -83,12 +83,14 @@
           <button id="removeResCenter" class="waves-effect waves-light btn">Rescue center</button>
           <button id="removeCustomer" class="waves-effect waves-light btn">Customer</button>
     
-          <p id="animalInfo" style="display: none">Give name of animal</p>
-          <p id="rescueInfo" style="display: none">Give name of rescue senter</p>
-          <p id="customerInfo"  style="display: none">Give name of customer</p>
+          <p id="animalInfo" style="display: none">Give ID of animal</p>
+          <p id="rescueInfo" style="display: none">Give ID of rescue senter</p>
+          <p id="customerInfo"  style="display: none">Give ID of customer</p>
     
-          <form id="removeItem" style="display: none">
-            <label for="itemName" style="color: black;">Insert name:</label><br>
+          <form id="removeItemForm" style="display: none">
+            <label for="itemID" style="color: black;">Insert ID:</label><br>
+            <input type="text" id="itemID" name="itemID"><br>
+            <label for="itemName"  style="color: black;">Insert name:</label><br>
             <input type="text" id="itemName" name="itemName"><br>
           </form>
           <button id="removeBTN" class="waves-effect waves-light btn" style="display: none;">Remove</button>

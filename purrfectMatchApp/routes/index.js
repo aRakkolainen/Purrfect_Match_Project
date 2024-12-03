@@ -32,8 +32,82 @@ router.get('/getTable', async (req,res) => {
   //res.json({'message': 'finished'})
 })
 
+router.post('/removeData', async (req, res) => {
+  console.log("hello from remove");
+  const { databaseName, table } = req.query;
+  console.log(databaseName)
+  console.log(table)
+  const { itemData } = req.body;
+  console.log(itemData);
+
+  try {
+    const db = getDatabaseConnection(databaseName);
+    
+    if (table === 'animals'){
+      console.log(table)
+
+      const queryText = `
+        DELETE FROM ${table} WHERE animal_id = $1 and animal_name = $2
+      `;
+      const values = [itemData[0], itemData[1]];
+      const result = await db.query(queryText, values);
+      console.log(result.rowCount)
+      await mainDB.query(queryText, values);
+      
+      //Check if any was removed
+      if (result.rowCount != 0){
+        return res.json({ success: true }); 
+      }
+      
+      return res.json({ success: false }); 
+    }
+    else if (table === 'rescue_centers'){
+      console.log(table)
+      
+      //Find correct contact person
+      const correctPerson = await db.query(
+        `SELECT contact_person_id FROM contact_persons WHERE rescue_center_id = $1`, 
+        [itemData[0]]
+      );
+      
+      if (!correctPerson.rows[0]) {
+        return res.json({ success: false, message: "No contact person found for this rescue center." });
+      }
+      console.log(correctPerson);
+      let personID = correctPerson.rows[0].contact_person_id;
+      console.log(personID)
+
+      
+      //Remove correct contact person
+      const queryTextPerson = `DELETE FROM contact_persons WHERE contact_person_id = $1`;
+      const valuesPerson = [personID];
+      await db.query(queryTextPerson, valuesPerson);
+      await mainDB.query(queryTextPerson, valuesPerson);
+
+      const queryTextRescue = `
+        DELETE FROM ${table} WHERE rescue_center_id = $1 and rescue_center_name = $2
+      `;
+      const valuesRescue = [itemData[0], itemData[1]];
+      await db.query(queryTextRescue, valuesRescue);
+      const result = await mainDB.query(queryTextRescue, valuesRescue);
+      
+      //Check if any was removed
+      if (result.rowCount != 0){
+        return res.json({ success: true }); 
+      }
+      return res.json({ success: false }); 
+    }
+    else if (table === 'customers'){
+      console.log(table)
+      res.json({ success: true }); 
+    }
+  }catch (err) {
+        console.error("Postgre database error:", err.message);
+        res.status(500).send("Postgre database error: " + err.message);
+    }
+})
+
 router.post('/insertData', async (req, res) => {
-  console.log('Hello From insert')
   const { databaseName, table } = req.query;
   const { data } = req.body;
   console.log(databaseName)
@@ -61,7 +135,7 @@ router.post('/insertData', async (req, res) => {
       await db.query(queryText, values);
       await mainDB.query(queryText, values);
     } else if (table === 'rescue_centers') {
-      const rescueCenterCount = countRows(databaseName, table)
+      //const rescueCenterCount = countRows(databaseName, table)
 
       const queryTextResCenter = `
         INSERT INTO ${table} 
@@ -98,6 +172,7 @@ async function countRows(db, table){
   const count = parseInt((rowCount.rows[0] && rowCount.rows[0].row_count) || 0, 10) + 1;
   console.log(`New count for table ${table}: ${count}`);
   return count;
+
 };
 
 //Function to  get correct database connection
