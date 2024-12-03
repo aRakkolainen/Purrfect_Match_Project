@@ -99,7 +99,30 @@ router.post('/removeData', async (req, res) => {
     }
     else if (table === 'customers'){
       console.log(table)
-      res.json({ success: true }); 
+
+      // set null to donations made by customer
+      const queryTextDonation =  `
+      UPDATE donations SET customer_id = NULL WHERE customer_id = $1
+    `;
+      const donationValues = [itemData[0]];
+      await db.query(queryTextDonation,donationValues);
+      await mainDB.query(queryTextDonation,donationValues);
+
+      //Remove custoemr
+      const queryText = `
+        DELETE FROM ${table} WHERE customer_id = $1 and customer_name = $2
+      `;
+      const values = [itemData[0], itemData[1]];
+      const result = await db.query(queryText, values);
+      console.log(result.rowCount)
+      await mainDB.query(queryText, values);
+      
+      //Check if any was removed
+      if (result.rowCount != 0){
+        return res.json({ success: true }); 
+      }
+      
+      return res.json({ success: false }); 
     }
   }catch (err) {
         console.error("Postgre database error:", err.message);
