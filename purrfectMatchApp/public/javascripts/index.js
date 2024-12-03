@@ -4,9 +4,7 @@ const southernFinlandProvinceBtn = document.getElementById(
   "SouthernFinlandProvinceBtn"
 );
 const provinceOfOuluBtn = document.getElementById("OuluProvinceBtn");
-const easternFinlandProvinceBtn = document.getElementById(
-  "EasternFinlandProvinceBtn"
-);
+const easternFinlandProvinceBtn = document.getElementById("EasternFinlandProvinceBtn");
 
 function toggleView(showAdmin) {
   const userView = document.getElementById("user-view");
