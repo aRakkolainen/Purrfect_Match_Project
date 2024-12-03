@@ -6,14 +6,6 @@ const southernFinlandProvinceBtn = document.getElementById(
 const provinceOfOuluBtn = document.getElementById("OuluProvinceBtn");
 const easternFinlandProvinceBtn = document.getElementById("EasternFinlandProvinceBtn");
 
-
-
-const showAllRescueCentersBtn = document.getElementById("showAllRescueCenters");
-showAllRescueCentersBtn.addEventListener("click", () => {
-    window.location.href = "http://localhost:3000/allRescueCenters.html";
-})
-
-
 function toggleView(showAdmin) {
   const userView = document.getElementById("user-view");
   const adminView = document.getElementById("admin-view");

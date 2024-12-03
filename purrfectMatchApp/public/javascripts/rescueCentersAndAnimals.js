@@ -19,7 +19,7 @@ const cardsPerPage = 10;
 window.onload = async () => {
     filterBtn.addEventListener("click", async () => {
         console.log("Filtering based on your choice..");
-        clearAnimalsCards();
+        clearAnimalCards();
         if(showAllRescueCenters.checked) {
             console.log("Showing all rescue centers and their animals..");
             let url = 'http://localhost:3000/list/rescueCenters/animals/all';
@@ -48,63 +48,17 @@ window.onload = async () => {
 async function fetchAndFillRescueAnimalsList(url) {
     let response = await fetchRescueCentersData(url);
     let rescueCenterAnimalsList = response.rescueCenterAnimals;
-    //Source 1 was used for this pagination part
-    const pageCount = calculatePageCount(rescueCenterAnimalsList.length, cardsPerPage);
-    const remainder = calculateRemainder(rescueCenterAnimalsList.length, cardsPerPage);
-    if(cardsPerPage > rescueCenterAnimalsList.length) {
-        clearAnimalsCards();
-        fillRescueCenterAnimalCards(rescueCenterAnimalsList, 0, rescueCenterAnimalsList.length);
-    } else {
-        clearAnimalsCards();
-        fillRescueCenterAnimalCards(rescueCenterAnimalsList, 0, cardsPerPage);
-    }
+    fillRescueCenterAnimalCards(rescueCenterAnimalsList);
 
-    if(pageCount > 1) {
-        let pagination = document.getElementById("pagination");
-        pagination.setAttribute("class", "pagination");
-        for (let j = 0; j < pageCount - 1; j++) {
-            let button = document.createElement("button");
-            button.setAttribute("class", "waves-light btn");
-            button.innerText = parseInt(j+1);
-            button.addEventListener("click", () => {
-                clearAnimalsCards();
-                fillRescueCenterAnimalCards(rescueCenterAnimalsList, j*cardsPerPage, j*cardsPerPage+cardsPerPage);
-            })
-            pagination.appendChild(button);
-          }
-          // Add the last page button which might have less cards
-          if (remainder !== 0) {
-
-            let button = document.createElement("button");
-            
-            button.innerText = pageCount;
-            button.setAttribute("class", "waves-light btn");
-            button.addEventListener("click", () => {
-                clearAnimalsCards();
-                fillRescueCenterAnimalCards(rescueCenterAnimalsList, pageCount-1*cardsPerPage, (pageCount-1)*cardsPerPage+remainder);
-            })
-            pagination.appendChild(button);
-          } else {
-            let button = document.createElement("button");
-            button.setAttribute("class", "waves-light btn");
-            button.innerText = pageCount;
-            button.addEventListener("click", () => {
-                clearAnimalsCards();
-                fillRescueCenterAnimalCards(rescueCenterAnimalsList, pageCount-1*cardsPerPage, (pageCount-1)*cardsPerPage+cardsPerPage);
-            });
-          }
-
-          backToTopBtn.setAttribute("class", "visible");
-          paginationLabel.setAttribute("class", "visible");
-          backToTopBtn.addEventListener("click", () => {
-                document.documentElement.scrollTop = 0;
-          })
+    backToTopBtn.setAttribute("class", "visible");
+    backToTopBtn.addEventListener("click", () => {
+        document.documentElement.scrollTop = 0;
+    })
           
-    }
-
-
-
 }
+
+
+
 async function fetchRescueCentersData(url) {
     let result = await fetch(url);
     let rescueCenterAnimalsList = await result.json();
@@ -122,22 +76,15 @@ function calculateRemainder(totalAnimalCards, cardsPerPage) {
 
 
 
-function fillRescueCenterAnimalCards(rescueCenterAnimalsList, startIndex, endIndex) {
-    //if(rescueCenterAnimalsList && rescueCenterAnimalsList.length > 0) {
+function fillRescueCenterAnimalCards(rescueCenterAnimalsList) {
+    if(rescueCenterAnimalsList && rescueCenterAnimalsList.length > 0) {
         let id=0;
-        for (let i=startIndex; i < endIndex; i++) {
-            let animal = rescueCenterAnimalsList[i];
-            let item = createRescueCenterListItem(animal, id);
-            animalCardsList.appendChild(item);
-            id++;
-        }
-        /* rescueCenterAnimalsList.forEach(animal => {
-            while(id > pageCount) {
+        rescueCenterAnimalsList.forEach((animal) => {
                 let item = createRescueCenterListItem(animal, id);
                 animalCardsList.appendChild(item);
                 id++;
-            }
-        }); */
+        });
+}
 }
 //Source: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
 function getRandomIndex(max) {
@@ -234,7 +181,7 @@ function addText(id, text) {
     return textBox;
 }
 //Based on this tutorial: https://www.tutorialspoint.com/how-to-remove-an-added-list-items-using-javascript
-function clearAnimalsCards() {
+function clearAnimalCards() {
     while(animalCardsList.firstChild) {
         animalCardsList.removeChild(animalCardsList.firstChild);
     }
