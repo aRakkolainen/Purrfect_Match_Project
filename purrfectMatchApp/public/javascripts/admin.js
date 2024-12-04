@@ -227,13 +227,13 @@ function toggleModifyView(showForm) {
         modifyRescue.style.display = 'none';
         modifyPerson.reset();
         modifyPerson.style.display = 'none';
-    } else if (showForm === 'rescue') {
+    } else if (showForm === 'rescue_centers') {
         modifyRescue.style.display = 'block';
         modifyAnimal.reset();
         modifyAnimal.style.display = 'none';
         modifyPerson.reset();
         modifyPerson.style.display = 'none';
-    } else if (showForm === 'person') {
+    } else if (showForm === 'contact_persons') {
         modifyPerson.style.display = 'block';
         modifyAnimal.reset();
         modifyAnimal.style.display = 'none';
@@ -243,10 +243,129 @@ function toggleModifyView(showForm) {
 
     modifyBTN.style.display = 'block';
 
+    const newModifyBTN = modifyBTN.cloneNode(true);
+    modifyBTN.parentNode.replaceChild(newModifyBTN, modifyBTN);
+
+
+    newModifyBTN.addEventListener('click', async () => {
+
+        let oldData = [];
+        let data = [];
+
+        if (showForm === 'animals') {
+            const animelID = document.getElementById('animalIDExist').value;
+            const animalName = document.getElementById('animalNameExist').value;
+
+            const newName = document.getElementById('newAnimalName').value;
+            const newSpecies = document.getElementById('newSpecies').value;
+            const newDescription = document.getElementById('newDesc').value;
+            const newAge = document.getElementById('newAge').value;
+            const newRequirements = document.getElementById('newRequirement').value;
+            const newRescue= document.getElementById('newRescue').value;
+
+            if (!animalName || !animelID) {
+            alert("Please fill in all fields.");
+            return;
+        }
+
+        if (!animalName & !newSpecies & !newDescription & !newAge & !newRequirements & !newRescue) {
+            alert("Please fill atleas one field.");
+            return;
+        }
+        oldData = [animalName, animelID]
+        data = [newSpecies, newName, newDescription, newAge, newRequirements, newRescue];
+        }
+        else if (showForm === 'rescue_centers'){
+            const centerID = document.getElementById('rescueIDExist').value;
+            const CenterName = document.getElementById('rescueNameExist').value;
+
+            const newNameCenter = document.getElementById('newRescueName').value;
+            const newAddress = document.getElementById('newAddressResc').value;
+       
+            if (!CenterName || !centerID) {
+                alert("Please fill in all fields.");
+                return;
+            }
+
+            if (!newNameCenter  & !newAddress) {
+                alert("Please fill atleast one of fields.");
+                return;
+            }
+            oldData = [CenterName, centerID]
+            data = [newNameCenter, newAddress];
+        }
+
+        else if (showForm === 'contact_persons'){
+            const personID = document.getElementById('personIDExit').value;
+            const personName = document.getElementById('personNameExit').value;
+
+            const newPersonName = document.getElementById('newPersonName').value;
+            const newEmail = document.getElementById('newPersonEmail').value;
+            const newPhone = document.getElementById('newPersonPhone').value;
+            const newRescueCent = document.getElementById('ContactResc').value;
+
+            if (!personName || !personID) {
+                alert("Please fill in all fields.");
+                return;
+            }
+
+            if (!newPersonName & !newEmail  & !newPhone  & !newRescueCent) {
+                alert("Please fill atleast one of fields.");
+                return;
+            }
+            oldData = [personName, personID]
+            data = [newPersonName, newEmail, newPhone, newRescueCent];
+        }
+        modifyData(showForm, oldData, data);
+    })
+
 }
 document.getElementById('modifyAnimal').addEventListener('click', () => toggleModifyView('animals'));
 document.getElementById('modifyResCenter').addEventListener('click', () => toggleModifyView('rescue_centers'));
-document.getElementById('modifyContact').addEventListener('click', () => toggleModifyView('person'));
+document.getElementById('modifyContact').addEventListener('click', () => toggleModifyView('contact_persons'));
+
+function modifyData (tableName, oldData, newData){
+    console.log(oldData)
+    console.log(newData)
+    fetch(`/modifyData?databaseName=${handledDatabase}&table=${tableName}`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ oldData, newData })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success === true){
+            alert("data modified successfully")
+            document.getElementById('modifyAnimalForm').reset();
+            document.getElementById('modifyRescueForm').reset();
+            document.getElementById('modifyPersonForm').reset();
+            document.getElementById('modifyAnimalForm').style.display = 'none';
+            document.getElementById('modifyRescueForm').style.display = 'none';
+            document.getElementById('modifyPersonForm').style.display = 'none';
+            document.getElementById('modifyBTN').style.display = 'none';
+        }
+        else {
+            
+            alert("something went wrong")
+        }
+
+        
+    }).catch(error => {
+        console.error("Error:", error);
+    });
+}
+
+
+
+
+
+
+
+
+
+
 
 //Open insert forms for different database tables
 async function toggleInsertView(showForm) {

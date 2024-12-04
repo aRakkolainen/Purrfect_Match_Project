@@ -107,25 +107,31 @@
           
           <form id="modifyAnimalForm" style="display: none">
             <p id="modifyInfoA">Which animal's data you want to modify?</p>
+            <label for="animalIDExist"style="color: black";>ID of animal:</label><br>
+            <input type="text" id="animalIDExist" name="animalIDExist"><br>
             <label for="animalNameExist"style="color: black";>Name of animal:</label><br>
             <input type="text" id="animalNameExist" name="animalNameExist"><br>
             <p>Data you want to modify:</p>
             <label for="newAnimalName" style="color: black;">New name of animal:</label><br>
-            <input type="text" id="animalName" name="animalName"><br>
+            <input type="text" id="newAnimalName" name="animalName"><br>
             <label for="newSpecies" style="color: black;">New species of animal:</label><br>
             <input type="text" id="newSpecies" name="newSpecies"><br>
             <label for="newDesc" style="color: black;">New description of animal:</label><br>
             <input type="text" id="newDesc" name="newDesc"><br>
             <label for="newAge" style="color: black;">New age of animal:</label><br>
             <input type="number" id="newAge" name="newAge" min="0"><br>
+            <label for="newRequirement" style="color: black;">New requirements of animal:</label><br>
+            <input type="text" id="newRequirement" name="newRequirement"><br>
             <label for="newRescue" style="color: black;">New rescue senter name of animal:</label><br>
             <input type="text" id="newRescue" name="newRescue"><br>
           </form>
     
           <form id="modifyRescueForm" style="display: none">
             <p id="modifyInfoR">Which rescue center's data you want to modify?</p>
+            <label for="rescueIDExist" style="color: black;">ID of rescue center:</label><br>
+            <input type="text" id="rescueIDExist" name="rescueIDExist"><br>
             <label for="rescueNameExist" style="color: black;">Name of rescue center:</label><br>
-            <input type="text" id="rescueName" name="animalName"><br>
+            <input type="text" id="rescueNameExist" name="rescueNameExist"><br>
             <p>Data you want to modify:</p>
             <label for="newRescueName" style="color: black;">New name of rescue center:</label><br>
             <input type="text" id="newRescueName" name="newRescueName"><br>
@@ -134,6 +140,8 @@
           </form>
     
           <form id="modifyPersonForm" style="display: none">
+            <label for="personIDExit" style="color: black;">Insert contact person ID:</label><br>
+            <input type="text" id="personIDExit" name="personIDExit"><br>
             <label for="personNameExit" style="color: black;">Insert contact person name:</label><br>
             <input type="text" id="personNameExit" name="personNameExit"><br>
             <p>Data you want to modify:</p>

@@ -130,12 +130,163 @@ router.post('/removeData', async (req, res) => {
     }
 })
 
+router.post('/modifyData', async (req, res) => {
+  const {databaseName, table} = req.query;
+  const {oldData} = req.body;
+  let newData = req.body.newData;
+  console.log(oldData);
+  console.log(newData);
+
+  const db = getDatabaseConnection(databaseName);
+  let modified;
+
+  if( table === 'animals'){
+    if (newData[1] === ''){
+      newData[1]=oldData[0];
+    }
+    if (newData[0] === ''){
+      const searchQuery = `
+        SELECT species from ${table} WHERE animal_id = $1 AND animal_name = $2
+      `;
+      const values = [oldData[1], oldData[0]];
+      const result = await db.query(searchQuery, values);
+      const sameData = result.rows[0].species;
+      newData[0] = sameData;
+    }
+    if (newData[2] === ''){
+      const searchQuery = `
+        SELECT animal_description from ${table} WHERE animal_id = $1 AND animal_name = $2
+      `;
+      const values = [oldData[1], oldData[0]];
+      const result = await db.query(searchQuery, values);
+      const sameData = result.rows[0].animal_description;
+      newData[2] = sameData;
+    }
+    if (newData[3] === ''){
+      const searchQuery = `
+        SELECT age from ${table} WHERE animal_id = $1 AND animal_name = $2
+      `;
+      const values = [oldData[1], oldData[0]];
+      const result = await db.query(searchQuery, values);
+      const sameData = result.rows[0].age;
+      newData[3] = sameData;
+    }
+    if (newData[4] === ''){
+      const searchQuery = `
+        SELECT requirement_description from ${table} WHERE animal_id = $1 AND animal_name = $2
+      `;
+      const values = [oldData[1], oldData[0]];
+      const result = await db.query(searchQuery, values);
+      const sameData = result.rows[0].requirement_description;
+      newData[4] = sameData;
+    }
+    if (newData[5] != ""){
+      result = await db.query(`SELECT rescue_center_id FROM rescue_centers WHERE rescue_center_name = '${newData[5]}'`)
+      centerID = result.rows[0].rescue_center_id;
+      console.log(centerID);
+      newData[5] = centerID;
+    }
+    if (newData[5] === ''){
+      const searchQuery = `
+        SELECT rescue_center_id from ${table} WHERE animal_id = $1 AND animal_name = $2
+      `;
+      const values = [oldData[1], oldData[0]];
+      const result = await db.query(searchQuery, values);
+      const sameData = result.rows[0].rescue_center_id;
+      newData[5] = sameData;
+    }
+
+    
+    console.log(newData)
+     //Updateing queries
+    const updateQueryText = `
+    UPDATE animals SET species = $1, animal_name = $2, animal_description = $3, age = $4, requirement_description = $5, rescue_center_ID = $6  WHERE animal_id = $7 AND animal_name = $8
+    `;
+    const values = [newData[0], newData[1], newData[2], newData[3], newData[4], newData[5], oldData[1], oldData[0]];
+    await db.query(updateQueryText, values);
+    modified = await mainDB.query(updateQueryText, values);
+  }
+  else if (table === 'rescue_centers'){
+    if (newData[0] === ''){
+      newData[0]=oldData[0];
+    }
+    if (newData[1] === ''){
+      const searchQuery = `
+        SELECT center_location from ${table} WHERE rescue_center_ID = $1 AND rescue_center_name = $2
+      `;
+      const values = [oldData[1], oldData[0]];
+      const result = await db.query(searchQuery, values);
+      const sameData = result.rows[0].center_location;
+      newData[1] = sameData;
+    }
+
+    console.log(newData)
+    //Updateing queries
+    const updateQueryText = `
+    UPDATE rescue_centers SET rescue_center_name = $1, center_location = $2 WHERE rescue_center_id = $3 AND rescue_center_name = $4
+   `;
+    const values = [newData[0], newData[1], oldData[1], oldData[0]];
+    await db.query(updateQueryText, values);
+    modified = await mainDB.query(updateQueryText, values);
+  }
+  else if (table === 'contact_persons'){
+    if (newData[0] === ''){
+      newData[0]=oldData[0];
+    }
+    if (newData[1] === ''){
+      const searchQuery = `
+        SELECT email from ${table} WHERE contact_person_id = $1 AND contact_person = $2
+      `;
+      const values = [oldData[1], oldData[0]];
+      const result = await db.query(searchQuery, values);
+      const sameData = result.rows[0].email;
+      newData[1] = sameData;
+    }
+    if (newData[2] === ''){
+      const searchQuery = `
+        SELECT phone from ${table} WHERE contact_person_id = $1 AND contact_person = $2
+      `;
+      const values = [oldData[1], oldData[0]];
+      const result = await db.query(searchQuery, values);
+      const sameData = result.rows[0].phone;
+      newData[2] = sameData;
+    }
+    if (newData[3] != ""){
+      result = await db.query(`SELECT rescue_center_id FROM rescue_centers WHERE rescue_center_name = '${newData[3]}'`)
+      centerID = result.rows[0].rescue_center_id;
+      console.log(centerID);
+      newData[3] = centerID;
+    }
+    if (newData[3] === ''){
+      const searchQuery = `
+        SELECT rescue_center_id from ${table} WHERE contact_person_id = $1 AND contact_person = $2
+      `;
+      const values = [oldData[1], oldData[0]];
+      const result = await db.query(searchQuery, values);
+      const sameData = result.rows[0].rescue_center_id;
+      newData[3] = sameData;
+    }
+    
+    console.log(newData)
+    //Updateing queries
+    const updateQueryText = `
+    UPDATE contact_persons SET contact_person = $1, email = $2, phone = $3, rescue_center_id = $4 WHERE contact_person_id = $5 AND contact_person = $6
+   `;
+    const values = [newData[0], newData[1], newData[2], newData[3], oldData[1], oldData[0]];
+    await db.query(updateQueryText, values);
+    modified = await mainDB.query(updateQueryText, values);
+  }
+  //Check if any was modif
+  if (modified.rowCount != 0){
+    return res.json({ success: true }); 
+  }
+    
+    return res.json({ success: false }); 
+})
+
 router.post('/insertData', async (req, res) => {
   const { databaseName, table } = req.query;
   const { data } = req.body;
-  console.log(databaseName)
-  console.log(table)
-  console.log(data)
 
   try {
     //Connect to ringht database
