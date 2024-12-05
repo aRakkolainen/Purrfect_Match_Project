@@ -29,7 +29,7 @@ async function cusDonations() {
   const email = document.getElementById("customer_email").value;
 
   try {
-    const response = await fetch("http://localhost:5000/usersDonation", {
+    const response = await fetch("http://localhost:3000/usersDonation", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -56,6 +56,7 @@ async function cusDonations() {
     });
   } catch (err) {
     console.log(err);
+    alert("Something went wrong while searching donations.");
   }
 }
 
@@ -65,7 +66,7 @@ async function checkAccount() {
   const email = document.getElementById("customer_email").value;
 
   try {
-    const response = await fetch("http://localhost:5000/accountCheck", {
+    const response = await fetch("http://localhost:3000/accountCheck", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -130,7 +131,7 @@ function selectedRescueCenter(center, customerid, selectedArea) {
 //Make donation for the center
 async function donation(rescueCenterID, customerID, donAmount, selectedArea) {
   try {
-    const response = await fetch("http://localhost:5000/donation", {
+    const response = await fetch("http://localhost:3000/donation", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -143,11 +144,12 @@ async function donation(rescueCenterID, customerID, donAmount, selectedArea) {
       }),
     });
     if (response.ok) {
-      console.log("Donation was successful!");
+      alert("Donation was successful!");
     } else {
-      console.error("Failed to process donation.");
+      alert("Failed to process donation.");
     }
   } catch (err) {
     console.log(err);
+    alert("Failed to process donation.");
   }
 }
