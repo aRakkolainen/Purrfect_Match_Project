@@ -4,10 +4,13 @@ This is our prototype of the Purrfect Match service. Purrfect match service is a
 
 
 ## Getting started  
-Restore the databases from the purrfectMatchApp/databases folder to the pgAdmin 4 (version 17).  
-In the purrfectMatchApp/db folder, add your own pgAdmin 4 information to the each file.  
+Restore the databases from the purrfectMatchApp/databases folder to the pgAdmin 4 (version 17). Remember to name databases with exactly same and change the ownership of each database to match your pgAdmin 4 information  
+In the purrfectMatchApp/db folder, add your own pgAdmin 4 information (username and password) to the each file.   
 
 ### How to run in terminal:  
 cd purrfectMatchApp  
 npm install (installs required dependencies)  
-npm run dev  
+npm start
+
+## Short demo video
+Link to short demonstration about our app will be linked here soon..
