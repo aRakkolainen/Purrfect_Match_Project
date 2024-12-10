@@ -5,7 +5,7 @@ const { Pool } = require('pg');
 
 const pool = new Pool({
     user: 'postgres',
-    password: 'x', 
+    password: 'K1ttyC4t', 
     host: 'localhost', 
     port: 5433, 
     database: 'Oulun laani'
@@ -14,17 +14,3 @@ const pool = new Pool({
 module.exports = {
     query: (text, params) => pool.query(text, params)
 }
-
-/*const { Pool } = require('pg');
-
-const pool = new Pool({
-    user: 'postgres',
-    password: "K1ttyC4t", 
-    host: 'localhost', 
-    port: 5433, 
-    database: 'Oulun laani'
-});
-
-module.exports = {
-    query: (text, params) => pool.query(text, params)
-}*/

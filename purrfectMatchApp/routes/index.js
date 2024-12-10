@@ -33,25 +33,19 @@ router.get('/getTable', async (req,res) => {
 })
 
 router.post('/removeData', async (req, res) => {
-  console.log("hello from remove");
   const { databaseName, table } = req.query;
-  console.log(databaseName)
-  console.log(table)
   const { itemData } = req.body;
-  console.log(itemData);
 
   try {
     const db = getDatabaseConnection(databaseName);
     
     if (table === 'animals'){
-      console.log(table)
 
       const queryText = `
         DELETE FROM ${table} WHERE animal_id = $1 and animal_name = $2
       `;
       const values = [itemData[0], itemData[1]];
       const result = await db.query(queryText, values);
-      console.log(result.rowCount)
       await mainDB.query(queryText, values);
       
       //Check if any was removed
@@ -62,7 +56,6 @@ router.post('/removeData', async (req, res) => {
       return res.json({ success: false }); 
     }
     else if (table === 'rescue_centers'){
-      console.log(table)
       
       //Find correct contact person
       const correctPerson = await db.query(
@@ -73,9 +66,7 @@ router.post('/removeData', async (req, res) => {
       if (!correctPerson.rows[0]) {
         return res.json({ success: false, message: "No contact person found for this rescue center." });
       }
-      console.log(correctPerson);
       let personID = correctPerson.rows[0].contact_person_id;
-      console.log(personID)
 
       
       //Remove correct contact person
@@ -98,7 +89,6 @@ router.post('/removeData', async (req, res) => {
       return res.json({ success: false }); 
     }
     else if (table === 'customers'){
-      console.log(table)
 
       // set null to donations made by customer
       const queryTextDonation =  `
@@ -114,7 +104,6 @@ router.post('/removeData', async (req, res) => {
       `;
       const values = [itemData[0], itemData[1]];
       const result = await db.query(queryText, values);
-      console.log(result.rowCount)
       await mainDB.query(queryText, values);
       
       //Check if any was removed
@@ -134,8 +123,6 @@ router.post('/modifyData', async (req, res) => {
   const {databaseName, table} = req.query;
   const {oldData} = req.body;
   let newData = req.body.newData;
-  console.log(oldData);
-  console.log(newData);
 
   const db = getDatabaseConnection(databaseName);
   let modified;
@@ -183,7 +170,6 @@ router.post('/modifyData', async (req, res) => {
     if (newData[5] != ""){
       result = await db.query(`SELECT rescue_center_id FROM rescue_centers WHERE rescue_center_name = '${newData[5]}'`)
       centerID = result.rows[0].rescue_center_id;
-      console.log(centerID);
       newData[5] = centerID;
     }
     if (newData[5] === ''){
@@ -196,8 +182,6 @@ router.post('/modifyData', async (req, res) => {
       newData[5] = sameData;
     }
 
-    
-    console.log(newData)
      //Updateing queries
     const updateQueryText = `
     UPDATE animals SET species = $1, animal_name = $2, animal_description = $3, age = $4, requirement_description = $5, rescue_center_ID = $6  WHERE animal_id = $7 AND animal_name = $8
@@ -219,8 +203,6 @@ router.post('/modifyData', async (req, res) => {
       const sameData = result.rows[0].center_location;
       newData[1] = sameData;
     }
-
-    console.log(newData)
     //Updateing queries
     const updateQueryText = `
     UPDATE rescue_centers SET rescue_center_name = $1, center_location = $2 WHERE rescue_center_id = $3 AND rescue_center_name = $4
@@ -254,7 +236,6 @@ router.post('/modifyData', async (req, res) => {
     if (newData[3] != ""){
       result = await db.query(`SELECT rescue_center_id FROM rescue_centers WHERE rescue_center_name = '${newData[3]}'`)
       centerID = result.rows[0].rescue_center_id;
-      console.log(centerID);
       newData[3] = centerID;
     }
     if (newData[3] === ''){
@@ -266,8 +247,7 @@ router.post('/modifyData', async (req, res) => {
       const sameData = result.rows[0].rescue_center_id;
       newData[3] = sameData;
     }
-    
-    console.log(newData)
+
     //Updateing queries
     const updateQueryText = `
     UPDATE contact_persons SET contact_person = $1, email = $2, phone = $3, rescue_center_id = $4 WHERE contact_person_id = $5 AND contact_person = $6
@@ -298,7 +278,6 @@ router.post('/insertData', async (req, res) => {
 
       result = await db.query(`SELECT rescue_center_id FROM rescue_centers WHERE rescue_center_name = '${data[5]}'`)
       centerID = result.rows[0].rescue_center_id;
-      console.log(centerID);
 
       const queryText = `
         INSERT INTO ${table} 
@@ -344,7 +323,6 @@ async function countRows(db, table){
   const rowCount = await db.query(`SELECT COUNT(*) AS row_count FROM ${table}`);
   //Help from ChatGPT to form this line correctly
   const count = parseInt((rowCount.rows[0] && rowCount.rows[0].row_count) || 0, 10) + 1;
-  console.log(`New count for table ${table}: ${count}`);
   return count;
 
 };

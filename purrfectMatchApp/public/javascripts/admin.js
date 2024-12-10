@@ -3,7 +3,6 @@
 //HArd coded pocket for database admin is handling
 let handledDatabase = "";
 
-console.log(handledDatabase);
 //Open admin view
 function toggleView(loginAdmin, user) {
     const adminView = document.getElementById('admin-view');
@@ -41,30 +40,26 @@ function login() {
     const password = document.getElementById('adminPassword').value;
     const database = document.querySelector('input[name="database"]:checked').value
     handledDatabase = database;
-    toggleView(true, name)
-    /*if (!name || !password) {
+    if (!name || !password) {
         alert("Please fill in all fields.");
         return;
     }
-    else if (password === "1234") {
-        
-       toggleView(true)
+    else if (password === "1234") { 
+       toggleView(true, name)
     }
     else {
         alert("Incorrect password or username")
-    }*/
+    }
 }
 document.getElementById('adminLoginBTN').addEventListener('click', () => login());
 
 //Admin prints tables from area database
 function printTables(table) {
-    console.log(handledDatabase)
     fetch(`/getTable?databaseName=${handledDatabase}&table=${table}`, {
         method: "GET"
     })
     .then(response => response.json())
     .then(data => {
-        console.log(data)
         clearTable();
         createTable(data, table);
         
@@ -325,8 +320,6 @@ document.getElementById('modifyResCenter').addEventListener('click', () => toggl
 document.getElementById('modifyContact').addEventListener('click', () => toggleModifyView('contact_persons'));
 
 function modifyData (tableName, oldData, newData){
-    console.log(oldData)
-    console.log(newData)
     fetch(`/modifyData?databaseName=${handledDatabase}&table=${tableName}`, {
         method: "POST",
         headers: {
@@ -430,7 +423,6 @@ document.getElementById('insertAnimal').addEventListener('click', () => toggleIn
 document.getElementById('insertResCenter').addEventListener('click', () => toggleInsertView('rescue_centers'));
 
 function insertData(tableName, data){
-    console.log(data)
     fetch(`/insertData?databaseName=${handledDatabase}&table=${tableName}`, {
         method: "POST",
         headers: {
