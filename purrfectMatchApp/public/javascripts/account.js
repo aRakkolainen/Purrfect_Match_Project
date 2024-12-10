@@ -27,7 +27,7 @@ async function update() {
   const newPhone = document.getElementById("new_customer_phone").value;
 
   try {
-    const response = await fetch("http://localhost:5000/update", {
+    const response = await fetch("http://localhost:3000/update", {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -44,8 +44,11 @@ async function update() {
     });
 
     const result = await response.json();
-    console.log(result);
+    if (response.ok) {
+      alert("Account was successfully updated");
+    }
   } catch (err) {
     console.log(err);
+    alert("Something went wrong while updating the account");
   }
 }

@@ -22,7 +22,7 @@ async function register() {
   const phone = document.getElementById("customer_phone").value;
 
   try {
-    const response = await fetch("http://localhost:5000/register", {
+    const response = await fetch("http://localhost:3000/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -31,8 +31,10 @@ async function register() {
     });
     if (response.ok) {
       console.log("Data inserted");
+      alert("Registration was success");
     }
   } catch (err) {
     console.log(err);
+    alert("Something went wrong while registering");
   }
 }
