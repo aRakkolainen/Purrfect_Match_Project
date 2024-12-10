@@ -257,7 +257,7 @@ function toggleModifyView(showForm) {
             const animalName = document.getElementById('animalNameExist').value;
 
             const newName = document.getElementById('newAnimalName').value;
-            const newSpecies = document.getElementById('newSpecies').value;
+            const newSpecies = document.getElementById('modifySpecies').value;
             const newDescription = document.getElementById('newDesc').value;
             const newAge = document.getElementById('newAge').value;
             const newRequirements = document.getElementById('newRequirement').value;
