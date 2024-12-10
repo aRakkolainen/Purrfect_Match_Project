@@ -12,5 +12,7 @@ cd purrfectMatchApp
 npm install (installs required dependencies)  
 npm start
 
+Admin site, remember to use password "1234" to get admin accesses
+
 ## Short demo video
 Link to short demonstration about our app will be linked here soon..
