@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <script type="module" src="./javascripts/rescueCentersAndAnimals.js" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" href="./stylesheets/style.css">
+    <title>Purrfect Match</title>
+</head>
+<body>
+    <nav>
+        <div class="nav-wrapper teal">
+          <ul>
+            <li>
+              <a href="/" id="home-btn" class="waves-light btn">Purrfect Match</a>
+            </li>
+          </ul>
+          <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li>
+              <a href="/rescueCentersAndAnimals.html" id="show-rescue-centers-btn" class="waves-light btn">Show animals of rescue centers</a>
+            </li>
+            <li>
+              <a href="/rescueCentersAndContacts.html" id="show-rescue-centers-btn" class="waves-light btn">Show contact persons of rescue centers</a>
+            </li>
+            <li>
+              <a href="/registration.html" id="register-btn" class="waves-light btn">Registration</a>
+            </li>
+            <li>
+              <a href="/donation.html" id="donation-btn" class="waves-light btn">Make a Donation</a>
+            </li>
+            <li>
+              <a href="/account.html" id="account-btn" class="waves-light btn">Account</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      <h2>Rescue centers and their animals</h2>
+      <h5>Choose location</h5>
+      <div id="filterOptions">
+        <p>
+          <label>
+            <input class="with-gap" name="area" type="radio" id="allProvincesOption" checked/>
+            <span>Show all in alphabetical order</span>
+          </label>
+        </p>
+        <p>
+          <label>
+            <input class="with-gap" name="area" type="radio" id="southernFinlandProvinceOption"/>
+            <span>Etelä-Suomen lääni</span>
+          </label>
+        </p>
+        <p>
+          <label>
+            <input class="with-gap" name="area" type="radio" id="easternFinlandProvinceOption" />
+            <span>Itä-Suomen lääni</span>
+          </label>
+        </p>
+        <p>
+          <label>
+            <input class="with-gap" name="area" type="radio" id="provinceOfOuluOption"/>
+            <span>Oulun lääni</span>
+          </label>
+        </div>
+        <br>
+        <button id="filterCentersBtn" class="waves-light btn">Search</button>
+        
+      </p>
+      <div>
+        <label for="pagination" class="hidden" id="paginationLabel">Navigate pages</label>
+        <div id="pagination" class="pagination"></div>
+      <ul id="rescueCenterAnimals">
+        
+      </ul>
+      <button id="backToTopBtn" class="hidden" name="hidden">Back To Top</button>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Purrfect Match</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <script type="module" src="./javascripts/donation.js" defer></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+    />
+    <link rel="stylesheet" href="./stylesheets/style.css" />
+  </head>
+  <body>
+    <nav>
+      <div class="nav-wrapper teal">
+        <ul>
+          <li>
+            <a href="/" id="home-btn" class="waves-light btn">Purrfect Match</a>
+          </li>
+        </ul>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+          <li>
+            <a href="/rescueCentersAndAnimals.html" id="show-rescue-centers-btn" class="waves-light btn">Show animals of rescue centers</a>
+          </li>
+          <li>
+            <a href="/rescueCentersAndContacts.html" id="show-rescue-centers-btn" class="waves-light btn">Show contact persons of rescue centers</a>
+          </li>
+          <li>
+            <a href="/registration.html" id="register-btn" class="waves-light btn">Registration</a>
+          </li>
+          <li>
+            <a href="/donation.html" id="donation-btn" class="waves-light btn">Make a Donation</a>
+          </li>
+          <li>
+            <a href="/account.html" id="account-btn" class="waves-light btn">Account</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <h2>Support rescue centers. Make a Donation</h2>
+    <h4>All you need to make a donation is an account.</h4>
+    <div id="registerAccount">
+      <p>Don't have an account?</p>
+      <a href="/registration.html" id="register-btn" class="waves-light btn"
+        >Register</a
+      >
+    </div>
+    <h5>
+      Make a new donation.<br />
+      Or would you like to view the donations you have made?
+    </h5>
+
+    <form id="accountCheckForm">
+      <label for="cutomer_name">Full name (fisrt and last name):</label>
+      <input type="text" id="cutomer_name" name="name" required /><br />
+      <label for="customer_email">Email:</label>
+      <input type="text" id="customer_email" name="email" required /><br />
+
+      <p>Select your own area</p>
+      <button type="button" id="etela-btn" class="waves-light btn">
+        Eteläsuomen lääni
+      </button>
+      <button type="button" id="oulu-btn" class="waves-light btn">
+        Oulun lääni
+      </button>
+      <button type="button" id="ita-btn" class="waves-light btn">
+        Itäsuomen lääni
+      </button>
+      <br />
+      <br />
+      <p>View my donations</p>
+      <button type="button" id="don-btn" class="waves-light btn">
+        My donations
+      </button>
+    </form>
+
+    <br />
+    <div id="donationsInfo">
+      <table id="donationsData">
+        <h4>My donations</h4>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Amount</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <div id="rescueInfo">
+      <table id="rescueData">
+        <h4>Select rescue center to Donate</h4>
+        <thead>
+          <tr>
+            <th>Name</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <div id="donation">
+      <h5>Make a Donation</h5>
+      <p id="selectedRescueCenter"></p>
+      <form id="donationForm">
+        <label for="donationAmount">Enter Donation Amount (€):</label>
+        <input
+          type="number"
+          id="donationAmount"
+          name="donationAmount"
+          required
+        />
+        <button type="submit" id="donate-btn" class="waves-light btn">
+          Donate
+        </button>
+      </form>
+    </div>
+  </body>
+</html>
