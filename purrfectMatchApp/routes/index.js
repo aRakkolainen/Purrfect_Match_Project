@@ -33,19 +33,25 @@ router.get('/getTable', async (req,res) => {
 })
 
 router.post('/removeData', async (req, res) => {
+  console.log("hello from remove");
   const { databaseName, table } = req.query;
+  console.log(databaseName)
+  console.log(table)
   const { itemData } = req.body;
+  console.log(itemData);
 
   try {
     const db = getDatabaseConnection(databaseName);
     
     if (table === 'animals'){
+      console.log(table)
 
       const queryText = `
         DELETE FROM ${table} WHERE animal_id = $1 and animal_name = $2
       `;
       const values = [itemData[0], itemData[1]];
       const result = await db.query(queryText, values);
+      console.log(result.rowCount)
       await mainDB.query(queryText, values);
       
       //Check if any was removed
@@ -56,6 +62,7 @@ router.post('/removeData', async (req, res) => {
       return res.json({ success: false }); 
     }
     else if (table === 'rescue_centers'){
+      console.log(table)
       
       //Find correct contact person
       const correctPerson = await db.query(
@@ -66,14 +73,35 @@ router.post('/removeData', async (req, res) => {
       if (!correctPerson.rows[0]) {
         return res.json({ success: false, message: "No contact person found for this rescue center." });
       }
+      console.log(correctPerson);
       let personID = correctPerson.rows[0].contact_person_id;
+      console.log(personID)
 
-      
+      //Remove all animals in center
+      const queryTextAnimal = `DELETE FROM animals WHERE rescue_center_id = $1`;
+      const valuesAnimal = [itemData[0]];
+      await db.query(queryTextAnimal, valuesAnimal);
+      await mainDB.query(queryTextAnimal, valuesAnimal);
+
+      console.log("animals removed");
+
+      // set null to donations made to center
+      const queryTextDonation =  `
+      UPDATE donations SET rescue_center_id = NULL WHERE rescue_center_id = $1
+    `;
+      const donationValues = [itemData[0]];
+      await db.query(queryTextDonation,donationValues);
+      await mainDB.query(queryTextDonation,donationValues);
+
+      console.log("Donations modified");
+
       //Remove correct contact person
       const queryTextPerson = `DELETE FROM contact_persons WHERE contact_person_id = $1`;
       const valuesPerson = [personID];
       await db.query(queryTextPerson, valuesPerson);
       await mainDB.query(queryTextPerson, valuesPerson);
+
+      console.log("Contact person removed");
 
       const queryTextRescue = `
         DELETE FROM ${table} WHERE rescue_center_id = $1 and rescue_center_name = $2
@@ -89,6 +117,7 @@ router.post('/removeData', async (req, res) => {
       return res.json({ success: false }); 
     }
     else if (table === 'customers'){
+      console.log(table)
 
       // set null to donations made by customer
       const queryTextDonation =  `
@@ -104,6 +133,7 @@ router.post('/removeData', async (req, res) => {
       `;
       const values = [itemData[0], itemData[1]];
       const result = await db.query(queryText, values);
+      console.log(result.rowCount)
       await mainDB.query(queryText, values);
       
       //Check if any was removed
@@ -123,6 +153,8 @@ router.post('/modifyData', async (req, res) => {
   const {databaseName, table} = req.query;
   const {oldData} = req.body;
   let newData = req.body.newData;
+  console.log(oldData);
+  console.log(newData);
 
   const db = getDatabaseConnection(databaseName);
   let modified;
@@ -170,6 +202,7 @@ router.post('/modifyData', async (req, res) => {
     if (newData[5] != ""){
       result = await db.query(`SELECT rescue_center_id FROM rescue_centers WHERE rescue_center_name = '${newData[5]}'`)
       centerID = result.rows[0].rescue_center_id;
+      console.log(centerID);
       newData[5] = centerID;
     }
     if (newData[5] === ''){
@@ -182,6 +215,8 @@ router.post('/modifyData', async (req, res) => {
       newData[5] = sameData;
     }
 
+    
+    console.log(newData)
      //Updateing queries
     const updateQueryText = `
     UPDATE animals SET species = $1, animal_name = $2, animal_description = $3, age = $4, requirement_description = $5, rescue_center_ID = $6  WHERE animal_id = $7 AND animal_name = $8
@@ -203,6 +238,8 @@ router.post('/modifyData', async (req, res) => {
       const sameData = result.rows[0].center_location;
       newData[1] = sameData;
     }
+
+    console.log(newData)
     //Updateing queries
     const updateQueryText = `
     UPDATE rescue_centers SET rescue_center_name = $1, center_location = $2 WHERE rescue_center_id = $3 AND rescue_center_name = $4
@@ -236,6 +273,7 @@ router.post('/modifyData', async (req, res) => {
     if (newData[3] != ""){
       result = await db.query(`SELECT rescue_center_id FROM rescue_centers WHERE rescue_center_name = '${newData[3]}'`)
       centerID = result.rows[0].rescue_center_id;
+      console.log(centerID);
       newData[3] = centerID;
     }
     if (newData[3] === ''){
@@ -247,7 +285,8 @@ router.post('/modifyData', async (req, res) => {
       const sameData = result.rows[0].rescue_center_id;
       newData[3] = sameData;
     }
-
+    
+    console.log(newData)
     //Updateing queries
     const updateQueryText = `
     UPDATE contact_persons SET contact_person = $1, email = $2, phone = $3, rescue_center_id = $4 WHERE contact_person_id = $5 AND contact_person = $6
@@ -272,38 +311,45 @@ router.post('/insertData', async (req, res) => {
     //Connect to ringht database
     const db = getDatabaseConnection(databaseName);
     //Get number for id
-    const rowCount = await countRows(db, table);
+    //const rowCount = await countRows(db, table);
 
     if (table === 'animals'){
 
+      const newID = await findUniqueID(db, table, "animal_id");
+
       result = await db.query(`SELECT rescue_center_id FROM rescue_centers WHERE rescue_center_name = '${data[5]}'`)
       centerID = result.rows[0].rescue_center_id;
+      console.log(centerID);
 
       const queryText = `
         INSERT INTO ${table} 
         (animal_ID, species, animal_name, animal_description, age, requirement_description, rescue_center_ID) 
         VALUES ($1, $2, $3, $4, $5, $6, $7)
       `;
-      const values = [`${databaseName[0]}_ANI_${rowCount}`, data[0], data[1], data[2], data[3], data[4], centerID];
+      const values = [`${databaseName[0]}_ANI_${newID}`, data[0], data[1], data[2], data[3], data[4], centerID];
       await db.query(queryText, values);
       await mainDB.query(queryText, values);
     } else if (table === 'rescue_centers') {
       //const rescueCenterCount = countRows(databaseName, table)
 
+      const newID = await findUniqueID(db, table, "rescue_center_id");
+
       const queryTextResCenter = `
         INSERT INTO ${table} 
         (rescue_center_ID, rescue_center_name, center_location) 
         VALUES ($1, $2, $3)
+        
         `;
-      const rescueValues = [`${databaseName[0]}_RES_${rowCount}`, data[0], data[1]];
+      const rescueValues = [`${databaseName[0]}_RES_${newID}`, data[0], data[1]];
 
       const quarytextConPerson = `
       INSERT INTO contact_persons 
       (contact_person_ID, contact_person, email, phone, rescue_center_ID ) 
       VALUES ($1, $2, $3, $4, $5)
+      
       `;
 
-      const personValues = [`${databaseName[0]}_CON_${rowCount}`, data[2], data[3], data[4], `${databaseName[0]}_RES_${rowCount}`];
+      const personValues = [`${databaseName[0]}_CON_${newID}`, data[2], data[3], data[4], `${databaseName[0]}_RES_${newID}`];
 
       await db.query(queryTextResCenter, rescueValues);
       await db.query(quarytextConPerson, personValues);
@@ -319,13 +365,24 @@ router.post('/insertData', async (req, res) => {
 });
 
 //Function to count rows for id
-async function countRows(db, table){
+/*async function countRows(db, table){
   const rowCount = await db.query(`SELECT COUNT(*) AS row_count FROM ${table}`);
   //Help from ChatGPT to form this line correctly
   const count = parseInt((rowCount.rows[0] && rowCount.rows[0].row_count) || 0, 10) + 1;
+  console.log(`New count for table ${table}: ${count}`);
   return count;
 
-};
+};*/
+
+//Find uniqu id, ChatGPT helps to create this function
+async function findUniqueID(db, table, column){
+  const result = await db.query(
+   `SELECT MAX(CAST(REGEXP_REPLACE(${column},  '[^0-9]', '', 'g') AS INTEGER)) AS max_id FROM ${table}`
+  );
+  const maxId = parseInt(result.rows[0] && result.rows[0].max_id ? result.rows[0].max_id : 0, 10) + 1;
+  console.log(`New ID for table ${table}: ${maxId}`);
+  return maxId;
+}
 
 //Function to  get correct database connection
 function getDatabaseConnection(databaseName) {
