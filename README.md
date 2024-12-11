@@ -15,4 +15,4 @@ npm run dev
 Admin site, remember to use password "1234" to get admin accesses
 
 ## Short demo video
-[Link to short demonstration about our app will be linked here soon..](https://lut-my.sharepoint.com/:v:/g/personal/viia_mantymaki_student_lut_fi/EZXQ23Yy6aBBuDsvQipum5QBhXzrUUz8L1kwQWVdmzfwvw?e=nVa347&nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJTdHJlYW1XZWJBcHAiLCJyZWZlcnJhbFZpZXciOiJTaGFyZURpYWxvZy1MaW5rIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXcifX0%3D)
+[Link to short demon video](https://lut-my.sharepoint.com/:v:/g/personal/viia_mantymaki_student_lut_fi/EZXQ23Yy6aBBuDsvQipum5QBhXzrUUz8L1kwQWVdmzfwvw?e=nVa347&nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJTdHJlYW1XZWJBcHAiLCJyZWZlcnJhbFZpZXciOiJTaGFyZURpYWxvZy1MaW5rIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXcifX0%3D)
