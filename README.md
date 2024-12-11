@@ -10,7 +10,7 @@ In the purrfectMatchApp/db folder, add your own pgAdmin 4 information (username 
 ### How to run in terminal:  
 cd purrfectMatchApp  
 npm install (installs required dependencies)  
-npm start
+npm run dev
 
 Admin site, remember to use password "1234" to get admin accesses
 
