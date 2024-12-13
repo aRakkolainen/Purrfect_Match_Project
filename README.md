@@ -1,4 +1,4 @@
-# Purrfect Match  
+# Purrfect Match by Trio team  
 ### CT80A0000 Data-Intensive Systems 2.9.2024-15.12.2024, course project  
 This is our prototype of the Purrfect Match service. Purrfect match service is a platform that would bring together all rescue centers from all around Finland. The main idea is providing a seamless experience for finding and supporting rescue centers, offering personalized rescue animal profiles and making simple user account.
 
